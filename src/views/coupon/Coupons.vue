@@ -2,12 +2,6 @@
   <div class="pb-5">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1>الكوبونات</h1>
-      <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group me-2">
-          <button type="button" class="btn btn-sm btn-outline-secondary">مشاركة <i class="far fa-share-square"></i></button>
-          <button type="button" class="btn btn-sm btn-outline-secondary">تصدير <i class="fas fa-file-download"></i></button>
-        </div>
-      </div>
     </div>
 
     <h2 class="mt-4 mb-3">الكوبونات الموجودة</h2>
@@ -48,16 +42,10 @@
             <td>{{ res.used }}</td>
             <td>{{ res.created_at }}</td>
             <td class="d-flex icons">
-              <router-link to=""><i class="fas fa-edit"></i></router-link> |
-              <router-link to=""><i class="fas fa-times"></i></router-link>
-            </td>
+              <router-link :to="'/edit-coupon/' + res.id"><i class="fas fa-edit"></i></router-link></td>
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <div class="btn-group me-2">
-      <button type="button" class="btn btn-sm btn-outline-success">حذف المحدد من هنا لكن الحاصلين عليه يبقون بالسجلات ما ينحذفو</button>
     </div>
 
   </div>

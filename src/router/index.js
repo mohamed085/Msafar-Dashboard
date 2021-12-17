@@ -28,9 +28,11 @@ const routes = [
         { path: '/windows', component: () => import('../views/Windows') },
         { path: '/coupons-users', component: () => import('../views/coupon/CouponsUsers') },
         { path: '/add-new-coupon', component: () => import('../views/coupon/AddNewCoupon') },
+        { path: '/edit-coupon/:id', component: () => import('../views/coupon/EditCoupon') },
         { path: '/chats', component: () => import('../views/Chats') },
         { path: '/ads', component: () => import('../views/Ads/AllAds') },
         { path: '/add-ads', component: () => import('../views/Ads/AddAds') },
+        { path: '/complains', component: () => import('../views/Complain/complains') },
     ]
   },
   { path: '/user/:id', component: () => import('../views/UserInfo')},

@@ -72,7 +72,9 @@
               <td>
                 <b-avatar :src="res.id_photo"></b-avatar>
               </td>
-              <td>{{ res.name }}</td>
+              <td>
+                <router-link :to="'/user/' + res.id">{{ res.name }}</router-link>
+              </td>
               <td>
                 <span v-if="res.type === 0">عميل</span>
                 <span v-if="res.type === 1">مسافر</span>
@@ -93,7 +95,7 @@
               <td>{{ res.decision_maker }}</td>
               <td>{{ res.created_at }}</td>
               <td class="d-flex icons">
-                <router-link to=""><i class="fas fa-user-edit"></i></router-link>
+                <router-link :to="'/edit-customer-documentation/' + res.id "><i class="fas fa-user-edit"></i></router-link>
               </td>
             </tr>
           </tbody>
@@ -141,11 +143,6 @@ export default {
       myHeaders.append("authToken", token)
 
       let raw = JSON.stringify({
-        "filter": 0,
-        "nationality": "مصري",
-        "phone": "014785",
-        "national_id_number": "123456789",
-        "paginateCount": 10
       });
 
       let requestOptions = {
@@ -206,6 +203,17 @@ h1, h2 {
 
 .table .icons a:hover {
   color: #0a53be;
+}
+a {
+  color: #111111;
+  text-decoration: none;
+  padding: 2px 5px;
+}
+
+a:hover {
+  color: #198754;
+  border-bottom: 1px solid #198754;
+  padding: 2px 5px;
 }
 
 

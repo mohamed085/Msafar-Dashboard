@@ -55,9 +55,11 @@
             </thead>
             <tbody>
               <tr v-for="res in response" :key="res.id">
-                <td v-if="res.masafr.name">{{ res.masafr.name }}</td>
+                <td v-if="res.masafr.name">
+                  <router-link :to="'/traveller/' + res.masafr.id">{{ res.masafr.name }}</router-link>
+                </td>
                 <td>
-                  <span v-if="res.id">{{ res.id }}</span>
+                    <span v-if="res.id">{{ res.id }}</span>
                 </td>
                 <td>
                   <span v-if="res.masafr.nationality">{{ res.masafr.nationality }}</span>
@@ -263,6 +265,19 @@ h1, h2 {
 
 .search-form button {
   padding: 0 5px;
+}
+
+
+a {
+  color: #111111;
+  text-decoration: none;
+  padding: 2px 5px;
+}
+
+a:hover {
+  color: #198754;
+  border-bottom: 1px solid #198754;
+  padding: 2px 5px;
 }
 
 

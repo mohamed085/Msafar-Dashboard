@@ -11,17 +11,17 @@
         <div class="users-card d-flex flex-column justify-content-center align-items-center m-3">
           <h3 class="text-center">{{ data.masafrs_count }}</h3>
           <h4 class="text-center">اعضاء مسافرين</h4>
-          <span class="read-more d-flex justify-content-center">
+          <router-link to="/customers" class="read-more d-flex justify-content-center">
             <h5>إقراء المزيد</h5>
-          </span>
+          </router-link>
         </div>
 
         <div class="users-card d-flex flex-column justify-content-center align-items-center m-3">
           <h3 class="text-center">{{ data.trusts }}</h3>
           <h4 class="text-center">اعضاء موثقون</h4>
-          <span class="read-more d-flex justify-content-center">
+          <router-link to="" class="read-more d-flex justify-content-center">
             <h5>إقراء المزيد</h5>
-          </span>
+          </router-link>
         </div>
 
       </div>
@@ -31,9 +31,9 @@
         <div class="users-card d-flex flex-column justify-content-center align-items-center m-3">
           <h3 class="text-center">{{ data.all_users }}</h3>
           <h4 class="text-center">كل الاعضاء</h4>
-          <span class="read-more d-flex justify-content-center">
+          <router-link to="/customers" class="read-more d-flex justify-content-center">
             <h5>إقراء المزيد</h5>
-          </span>
+          </router-link>
         </div>
 
         <div class="users-card d-flex flex-column justify-content-center align-items-center m-3">
@@ -70,17 +70,17 @@
         <div class="users-card d-flex flex-column justify-content-center align-items-center m-3">
           <h3 class="text-center">{{ data.request_services }}</h3>
           <h4 class="text-center">الطلبات</h4>
-          <span class="read-more d-flex justify-content-center">
+          <router-link to="/orders" class="read-more d-flex justify-content-center">
             <h5>إقراء المزيد</h5>
-          </span>
+          </router-link>
         </div>
 
         <div class="users-card d-flex flex-column justify-content-center align-items-center m-3">
           <h3 class="text-center">{{ data.trips }}</h3>
           <h4 class="text-center">الرحلات</h4>
-          <span class="read-more d-flex justify-content-center">
+          <router-link to="/trips" class="read-more d-flex justify-content-center">
             <h5>إقراء المزيد</h5>
-          </span>
+          </router-link>
         </div>
 
         <div class="users-card d-flex flex-column justify-content-center align-items-center m-3">
@@ -102,9 +102,9 @@
         <div class="users-card d-flex flex-column justify-content-center align-items-center m-3">
           <h3 class="text-center">{{ data.complains }}</h3>
           <h4 class="text-center">الشكاوي</h4>
-          <span class="read-more d-flex justify-content-center">
+          <router-link to="/complains" class="read-more d-flex justify-content-center">
             <h5>إقراء المزيد</h5>
-          </span>
+          </router-link>
         </div>
 
       </div>
@@ -114,9 +114,9 @@
         <div class="users-card d-flex flex-column justify-content-center align-items-center m-3">
           <h3 class="text-center">{{ data.unverified_users }}</h3>
           <h4 class="text-center">عملاء لم يفعل الكود</h4>
-          <span class="read-more d-flex justify-content-center">
+          <router-link to="#" class="read-more d-flex justify-content-center">
             <h5>إقراء المزيد</h5>
-          </span>
+          </router-link>
         </div>
       </div>
 

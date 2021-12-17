@@ -56,6 +56,20 @@ export default {
     },
 
     logout(context) {
+        let myHeaders = new Headers();
+        const token = localStorage.getItem('token')
+
+        myHeaders.append("authToken", token);
+
+        let requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("https://msafr.we-work.pro/api/auth/admin/logout", requestOptions)
+            .then(response => response.json())
+
         context.commit('setUser', {
             token: null,
             userId: null,

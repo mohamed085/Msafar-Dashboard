@@ -51,22 +51,22 @@
           <tr v-for="res in response.data" :key="res.id">
             <td v-if="res.id">{{ res.id }}</td>
             <td>
-              <span v-if="res.request_trip.request.user">{{ res.request_trip.request.user.name }}</span>
+              <span v-if="res.request_trip.request">{{ res.request_trip.request.user.name }}</span>
               <span v-else></span>
             </td>
             <td>
-              <span v-if="res.request_trip.request.created_at">{{ res.request_trip.request.created_at }}</span>
+              <span v-if="res.request_trip.request">{{ res.request_trip.request.created_at }}</span>
               <span v-else></span>
             </td>
             <td>
-              <span v-if="res.request_trip.request_id">{{ res.request_trip.request_id }}</span>
+              <span v-if="res.request_trip">{{ res.request_trip.request_id }}</span>
               <span v-else></span>
             </td>
             <td>
-              <!--            <span v-if="res.request_trip.trip.masafr">{{ res.request_trip.trip.masafr.name }}</span>-->
-              <!--            <span v-else></span>-->
+              <router-link :to="'/traveller/' + res.request_trip.trip.masafr.id">
+                <span v-if="res.request_trip.trip">{{ res.request_trip.trip.masafr.name }}</span>
+              </router-link>
             </td>
-            <td>-</td>
             <td>-</td>
             <td>
               <span v-if="res.request_trip.payment_method === '0'"><b-badge variant="danger">اونلاين</b-badge> </span>
@@ -232,6 +232,19 @@ h1, h2, h4 {
 
 .search-form button {
   padding: 0 5px;
+}
+
+
+a {
+  color: #111111;
+  text-decoration: none;
+  padding: 2px 5px;
+}
+
+a:hover {
+  color: #198754;
+  border-bottom: 1px solid #198754;
+  padding: 2px 5px;
 }
 
 </style>

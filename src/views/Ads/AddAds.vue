@@ -9,7 +9,18 @@
     </div>
 
     <div v-else>
-      <b-form @submit.prevent="addAds">
+      <div v-if="msg">
+        <h3 class="mb-4">{{ msg }}</h3>
+        <div v-if="status">
+          <router-link class="ads-link" to="/ads">الاعلانات</router-link>
+        </div>
+
+        <div v-else-if="!status">
+          <span class="ads-link" @click="refreshLink">اضافة الاعلان مرة اخري</span>
+        </div>
+      </div>
+
+      <b-form v-else @submit.prevent="addAds">
 
         <b-badge>{{ this.msg }}</b-badge>
 
@@ -151,24 +162,22 @@
         </b-form-group>
 
         <b-form-group label-cols="2" label="ارسال الي">
-          <b-form-group>
-            <b-form-checkbox-group class="d-flex" id="checkbox-group-2" v-model="person_target">
-              <div class="d-flex">
-                <b-form-checkbox value="1"></b-form-checkbox>
-                <span class="me-2 ms-2">كل العملاء</span>
-              </div>
+          <b-form-radio-group v-model="person_target">
+            <div class="d-flex">
+              <b-form-radio value="1"></b-form-radio>
+              <span class="me-2 ms-2">كل العملاء</span>
+            </div>
 
-              <div class="d-flex">
-                <b-form-checkbox value="2"></b-form-checkbox>
-                <span class="me-2 ms-2">كل المسافرين</span>
-              </div>
+            <div class="d-flex">
+              <b-form-radio value="2"></b-form-radio>
+              <span class="me-2 ms-2">كل المسافرين</span>
+            </div>
 
-              <div class="d-flex">
-                <b-form-checkbox value="3"></b-form-checkbox>
-                <span class="me-2 ms-2">كل الزوار</span>
-              </div>
-            </b-form-checkbox-group>
-          </b-form-group>
+            <div class="d-flex">
+              <b-form-radio value="3"></b-form-radio>
+              <span class="me-2 ms-2">كل الزوار</span>
+            </div>
+          </b-form-radio-group>
         </b-form-group>
 
 
@@ -200,7 +209,8 @@ export default {
       days: [],
       person_target: [],
       file: '',
-      msg: ''
+      msg: '',
+      status: false
     }
   },
   methods: {
@@ -223,19 +233,19 @@ export default {
       myHeaders.append("authToken", token);
       myHeaders.append("Content-Type", "application/json");
 
-
       let raw = JSON.stringify({
         "subject": this.subject,
         "link": this.link,
-        "site_after_announcement": this.site_after_announcement,
+        "site_after_announcement": 5,
         "appear_time": this.appear_time,
         "daily_repeat": this.daily_repeat,
         "image": this.file,
         "animation_type": this.animation_type,
         "person_target": this.person_target,
+        "all_days": this.days.length == 7 ? 1 : 0,
         "days": this.days,
         "user_places": this.user_places,
-        "masafr_places":  this.masafr_places,
+        "masafr_places": this.masafr_places
       });
 
       let requestOptions = {
@@ -252,25 +262,48 @@ export default {
       this.spinner = false;
 
       if (responseData.status) {
+        this.status = true
         this.msg = 'تم إضافة الاعلان بنجاح'
       } else {
+        this.status = false
         this.msg = 'لم يتم اضافة الاعلان'
       }
 
       console.log(responseData)
 
+    },
+    refreshLink() {
+      this.msg = ''
+      this.status = false
     }
-  }
+  },
 }
 </script>
 
 <style scoped>
-h1, h2 {
+h1, h2, h3 {
   font-family: 'Almarai', sans-serif;
 }
 img {
   max-height: 300px;
   max-width: 400px;
+}
+
+.ads-link {
+  background-color: #198754;
+  color: #ffffff;
+  margin: 10px;
+  padding: 5px 25px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.ads-link:hover {
+  background-color: #ffffff;
+  color: #198754;
 }
 
 </style>

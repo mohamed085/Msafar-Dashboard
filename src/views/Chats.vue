@@ -51,7 +51,9 @@
           <tbody>
             <tr v-for="res in responseData" :key="res.id">
               <td>
-                <span v-if="res.request.user">{{ res.request.user.name }}</span>
+                <span v-if="res.request">
+                  <router-link :to="'/user/' + res.request.user.id">{{ res.request.user.name }}</router-link>
+                </span>
               </td>
               <td>
                 <span v-if="res.request">{{ res.request.id }}</span>
@@ -69,7 +71,9 @@
                <b-badge variant="success" v-else-if="res.offer_status == '5'">منفذ</b-badge>
              </td>
              <td>
-                <span v-if="res.trip">{{ res.trip.masafr.name }}</span>
+                <span v-if="res.trip">
+                  <router-link :to="'/user/' + res.trip.masafr.i">{{ res.trip.masafr.name }}</router-link>
+                </span>
              </td>
              <td>
                 <span v-if="res.trip">{{ res.trip.id }}</span>
@@ -187,5 +191,18 @@ h1, h2 {
 .search-form button {
   padding: 0 5px;
 }
+
+a {
+  color: #111111;
+  text-decoration: none;
+  padding: 2px 5px;
+}
+
+a:hover {
+  color: #198754;
+  border-bottom: 1px solid #198754;
+  padding: 2px 5px;
+}
+
 
 </style>

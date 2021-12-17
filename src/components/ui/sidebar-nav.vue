@@ -196,26 +196,20 @@
         </li>
 
         <li class="nav-item">
-          <router-link to="#" class="nav-link" aria-current="page">
+          <router-link to="/complains" class="nav-link" aria-current="page">
             <i class="far fa-file"></i>الشكاوي
           </router-link>
         </li>
 
         <li class="nav-item">
-          <router-link to="#" class="nav-link" aria-current="page">
-            <i class="far fa-file"></i>البلاغات
-          </router-link>
-        </li>
-
-        <li class="nav-item">
-          <router-link to="#" class="nav-link" aria-current="page">
+          <router-link to="/chats" class="nav-link" aria-current="page">
             <i class="far fa-file"></i>محدثات الشات
           </router-link>
         </li>
 
 
         <li class="nav-item">
-          <router-link to="#" class="nav-link" aria-current="page">
+          <router-link to="/customers-documentation" class="nav-link" aria-current="page">
             <i class="far fa-file"></i>توثيق الهويه
           </router-link>
         </li>
@@ -234,23 +228,8 @@
           <div v-if="displayArchivesSubItem" class="ms-3">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <router-link to="#" exact class="nav-link" aria-current="page">
-                  <i class="fas fa-users"></i>الرسائل
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="#" exact class="nav-link" aria-current="page">
+                <router-link to="/windows" exact class="nav-link" aria-current="page">
                   <i class="fas fa-plus"></i>النوافذ
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="#" exact class="nav-link" aria-current="page">
-                  <i class="fas fa-user"></i>sms
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="#" exact class="nav-link" aria-current="page">
-                  <i class="fas fa-user"></i>الاشعارات
                 </router-link>
               </li>
             </ul>

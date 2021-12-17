@@ -17,60 +17,60 @@
     <b-form v-if="!spinner" @submit.prevent="addNewOrder">
       <div class="d-flex row">
         <b-form-group class="col-6" label-cols="2" label="اسم القسم">
-          <b-form-input v-model="order.title"></b-form-input>
+          <b-form-input v-model="order.title" required></b-form-input>
         </b-form-group>
 
         <b-form-group class="col-6" label-cols="2" label="الموضوع">
-          <b-form-input v-model="order.subject"></b-form-input>
+          <b-form-input v-model="order.subject" required></b-form-input>
         </b-form-group>
       </div>
 
 
       <div class="d-flex flex-wrap row">
         <b-form-group class="col-2" label-cols="2" label="مفتوح">
-          <b-form-checkbox v-model="order.open" name="check-button" size="lg" switch></b-form-checkbox>
+          <b-form-checkbox v-model="order.open" name="check-button" size="lg" switch required></b-form-checkbox>
         </b-form-group>
 
         <b-form-group class="col-2" label-cols="2" label="سعودي">
-          <b-form-checkbox v-model="order.saudi" size="lg" switch></b-form-checkbox>
+          <b-form-checkbox v-model="order.saudi" size="lg" switch required></b-form-checkbox>
         </b-form-group>
 
         <b-form-group class="col-2" label-cols="6" label="دفع الالكتروني">
-          <b-form-checkbox v-model="order.payOnline" size="lg" switch></b-form-checkbox>
+          <b-form-checkbox v-model="order.payOnline" size="lg" switch required></b-form-checkbox>
         </b-form-group>
 
         <b-form-group class="col-2" label-cols="5" label="دفع يدوي">
-          <b-form-checkbox v-model="order.payOffline" size="lg" switch></b-form-checkbox>
+          <b-form-checkbox v-model="order.payOffline" size="lg" switch required></b-form-checkbox>
         </b-form-group>
 
         <b-form-group class="col-2" label-cols="2" label="تامين">
-          <b-form-checkbox v-model="order.tameen" size="lg" switch></b-form-checkbox>
+          <b-form-checkbox v-model="order.tameen" size="lg" switch required></b-form-checkbox>
         </b-form-group>
 
         <b-form-group class="col-2" label-cols="7" label="امكانية رفع صور">
-          <b-form-checkbox v-model="order.uploadPhoto" size="lg" switch></b-form-checkbox>
+          <b-form-checkbox v-model="order.uploadPhoto" size="lg" switch required></b-form-checkbox>
         </b-form-group>
 
         <b-form-group class="col-2" label-cols="2" label="مدينة">
-          <b-form-checkbox v-model="order.oneCity" size="lg" switch></b-form-checkbox>
+          <b-form-checkbox v-model="order.oneCity" size="lg" switch required></b-form-checkbox>
         </b-form-group>
 
         <b-form-group class="col-2" label-cols="2" label="مدينتين">
-          <b-form-checkbox v-model="order.twoCity" size="lg" switch></b-form-checkbox>
+          <b-form-checkbox v-model="order.twoCity" size="lg" switch required></b-form-checkbox>
         </b-form-group>
 
         <b-form-group class="col-2" label-cols="4" label="كود واحد">
-          <b-form-checkbox v-model="order.oneCode" size="lg" switch></b-form-checkbox>
+          <b-form-checkbox v-model="order.oneCode" size="lg" switch required></b-form-checkbox>
         </b-form-group>
 
         <b-form-group class="col-2" label-cols="2" label="كودين">
-          <b-form-checkbox v-model="order.twoCode" size="lg" switch></b-form-checkbox>
+          <b-form-checkbox v-model="order.twoCode" size="lg" switch required></b-form-checkbox>
         </b-form-group>
 
       </div>
 
       <b-form-group label-cols="2" label="اسم الرحلة">
-        <input type="file" @change="onFileChange($event)">
+        <input type="file" @change="onFileChange($event)" required>
       </b-form-group>
 
       <div>

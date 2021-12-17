@@ -37,84 +37,6 @@
       </b-form>
     </div>
 
-    <h2 class="mt-2 mb-3">فرز</h2>
-    <div class="filters d-flex flex-wrap mb-3">
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">الغير موثق</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">الموثق</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">خامل</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">نشظ</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">موقوف</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">سعودي مسافر</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">تامين محجوز</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">اجنبي عميل</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">مرفوض التوثيق</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">المخالفين</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">الارصدة</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">اجنبي مسافر</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">الرصيد المعلق</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">الاي ماك متشابهه</span>
-      </div>
-
-      <div class="filter d-flex">
-        <b-form-checkbox></b-form-checkbox>
-        <span class="me-2 ms-2 mt-auto mb-auto">عملاء جدد</span>
-      </div>
-    </div>
-
     <h2 class="mt-4 mb-3">العملاء الموجودين</h2>
     <button @click="addNewCustomer" type="button" class="btn btn-sm btn-outline-success mb-3"><i class="far fa-user-plus"></i> إضافة عميل جديد</button>
     <div class="table-responsive">
@@ -151,7 +73,11 @@
             <td>
               <b-avatar :src="res.photo"></b-avatar>
             </td>
-            <td>{{ res.name }}</td>
+            <td>
+              <router-link :to="'/user/' + res.id ">
+                {{ res.name }}
+              </router-link>
+            </td>
             <td>{{ res.nationality }}</td>
             <td>
               <span v-if="res.gender == 1">ذكر</span>
@@ -199,14 +125,6 @@
     </div>
 
 
-    <div class="btn-group me-2">
-      <button type="button" class="btn btn-outline-success">حذف المحدد</button>
-      <button type="button" class="btn btn-outline-success">إرسال SMS</button>
-      <button type="button" class="btn btn-outline-success">إرسال بريد</button>
-      <button type="button" class="btn btn-outline-success">إرسال إشعار</button>
-      <button type="button" class="btn btn-outline-success">إرسال نوافذ</button>
-    </div>
-
   </div>
 </template>
 
@@ -244,14 +162,6 @@ export default {
       myHeaders.append("authToken", token)
 
       let raw = JSON.stringify({
-        "filter": 0,
-        "name": "",
-        "email": "",
-        "nationality": "",
-        "phone": "",
-        "national_id_number": "",
-        "from_date": "",
-        "to_date": "",
       });
 
       let requestOptions = {
@@ -279,7 +189,7 @@ export default {
 
     },
     search(type) {
-      alert(type)
+      console.log(type)
     },
     addNewCustomer() {
       router.push('/add-new-customer')
@@ -316,6 +226,18 @@ h1, h2 {
 
 .search-form button {
   padding: 0 5px;
+}
+
+a {
+  color: #111111;
+  text-decoration: none;
+  padding: 2px 5px;
+}
+
+a:hover {
+  color: #198754;
+  border-bottom: 1px solid #198754;
+  padding: 2px 5px;
 }
 
 </style>
