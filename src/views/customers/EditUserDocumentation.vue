@@ -8,7 +8,7 @@
       <b-spinner variant="success" style="width: 3rem; height: 3rem;" type="grow" label="Spinning"></b-spinner>
     </div>
 
-    <div v-else class="row">
+    <div v-else >
       <div v-if="msg">
         <h3 class="mb-4">{{ msg }}</h3>
         <div v-if="status">
@@ -20,7 +20,7 @@
         </div>
       </div>
 
-      <div v-else>
+      <div v-else class="row">
 
         <div class="col-10">
           <div class="row">
