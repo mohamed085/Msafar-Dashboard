@@ -27,41 +27,6 @@
         </b-form>
       </div>
 
-      <h2 class="mt-2 mb-3">فرز</h2>
-      <div class="filters d-flex flex-wrap mb-3">
-        <div class="filter d-flex">
-          <b-form-checkbox size="lg"></b-form-checkbox>
-          <span class="me-2 ms-2 mt-auto mb-auto">الملغي</span>
-        </div>
-
-        <div class="filter d-flex">
-          <b-form-checkbox size="lg"></b-form-checkbox>
-          <span class="me-2 ms-2 mt-auto mb-auto">جاري التاكيد</span>
-        </div>
-
-        <div class="filter d-flex">
-          <b-form-checkbox size="lg"></b-form-checkbox>
-          <span class="me-2 ms-2 mt-auto mb-auto">جاري التنفيذ</span>
-        </div>
-
-        <div class="filter d-flex">
-          <b-form-checkbox size="lg"></b-form-checkbox>
-          <span class="me-2 ms-2 mt-auto mb-auto">معلق</span>
-        </div>
-
-        <div class="filter d-flex">
-          <b-form-checkbox size="lg"></b-form-checkbox>
-          <span class="me-2 ms-2 mt-auto mb-auto">تم التنفيذ</span>
-        </div>
-
-        <div class="filter d-flex">
-          <b-form-checkbox size="lg"></b-form-checkbox>
-          <span class="me-2 ms-2 mt-auto mb-auto">مبتهي</span>
-        </div>
-
-      </div>
-
-
       <div class="table-responsive">
         <table class="table  table-hover">
           <thead>
@@ -88,7 +53,7 @@
             <tr v-for="res in response.data" :key="res.id">
               <td></td>
               <td>
-                <img :src="res.photo" v-if="res.photo"/>
+                <b-avatar :src="res.user.photo" v-if="res.user.photo"/>
                 <span v-else>-</span>
               </td>
               <td>
@@ -105,6 +70,9 @@
               </td>
               <td>
                 <span v-if="res.created_at">{{ res.created_at }}</span>
+              </td>
+              <td>
+                <span v-if="res.from_place">{{ res.from_place }}</span>
                 <span v-else>-</span>
               </td>
               <td>
@@ -112,11 +80,22 @@
                 <span v-else>-</span>
               </td>
               <td>
-                <span v-if="res.request_trip">{{ res.request_trip.offer_status }}</span>
+                <span v-if="res.request_trip">
+                  <span v-for="request_trip in res.request_trip" :key="request_trip.id" class="d-flex flex-column">
+                    <b-badge variant="danger" v-if="request_trip.offer_status === '-1'">ملغي</b-badge>
+                    <b-badge variant="warning" v-else-if="request_trip.offer_status === '0'">غير مربوط</b-badge>
+                    <b-badge variant="success" v-else-if="request_trip.offer_status === '1'">فعال</b-badge>
+                    <b-badge variant="primary" v-else-if="request_trip.offer_status === '2'">معلق</b-badge>
+                    <b-badge variant="secondary" v-else-if="request_trip.offer_status === '3'">جاري التاكيد</b-badge>
+                    <b-badge variant="info" v-else-if="request_trip.offer_status === '4'">جاري التنفيذ</b-badge>
+                    <b-badge variant="info" class="text-black" v-else-if="request_trip.offer_status === '5'">منفذ</b-badge>
+                  </span>
+                </span>
                 <span v-else>-</span>
               </td>
               <td>
-                <span v-if="res.have_insurance">{{ res.have_insurance }}</span>
+                <b-badge variant="danger" v-if="res.have_insurance = '0'">لا يوجد تامين</b-badge>
+                <b-badge variant="success" v-else-if="res.have_insurance = '1'">يوجد تامين</b-badge>
                 <span v-else>-</span>
               </td>
               <td>
@@ -131,6 +110,7 @@
                 <span v-if="res.max_day">{{ res.max_day }}</span>
                 <span v-else>-</span>
               </td>
+
             </tr>
           </tbody>
         </table>
@@ -177,20 +157,15 @@ export default {
     async loadData() {
       this.spinner = true;
 
-      const url = 'https://msafr.we-work.pro/api/auth/admin/get-trips';
+      const url = 'https://msafr.we-work.pro/api/auth/admin/get-requests';
 
       let myHeaders = new Headers();
       const token = this.$store.getters.token;
 
       myHeaders.append("authToken", token)
+      myHeaders.append("Content-Type", "application/json");
 
-      let raw = JSON.stringify({
-        "filter": '',
-        "id": '',
-        "phone": this.phoneKey,
-        "from_place": this.fromCityKey,
-        "to_place": this.toCityKey,
-      });
+      let raw = JSON.stringify({});
 
       let requestOptions = {
         method: 'POST',
@@ -209,9 +184,6 @@ export default {
       }
 
       this.response = responseData.data
-
-      console.log(responseData)
-      console.log(this.response)
 
       this.spinner = false;
 
@@ -263,6 +235,9 @@ export default {
       }
 
       this.response = responseData.data
+
+      console.log(this.response)
+      console.log(responseData)
 
       this.spinner = false
 

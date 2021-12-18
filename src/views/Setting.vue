@@ -17,27 +17,27 @@
 
       <b-form v-if="!spinner" @submit.prevent="save">
         <b-form-group label-cols="2" label="عمولة علي العميل دفع الالكتروني">
-          <b-form-input v-model="setting.x1" type="number"></b-form-input>
+          <b-form-input v-model="setting.x1" type="number" required></b-form-input>
         </b-form-group>
 
         <b-form-group label-cols="2" label="عمولة علي المسافر من الاتفاق">
-          <b-form-input v-model="setting.x2" type="number"></b-form-input>
+          <b-form-input v-model="setting.x2" type="number" required></b-form-input>
         </b-form-group>
 
         <b-form-group label-cols="2" label="نسبة قيمة التامين علي العميل">
-          <b-form-input v-model="setting.x3" type="number"></b-form-input>
+          <b-form-input v-model="setting.x3" type="number" required></b-form-input>
         </b-form-group>
 
         <b-form-group label-cols="2" label="اقصي شحن رصيد">
-          <b-form-input v-model="setting.x4" type="number"></b-form-input>
+          <b-form-input v-model="setting.x4" type="number" required></b-form-input>
         </b-form-group>
 
         <b-form-group label-cols="2" label="اقصي مديونية علي المسافر">
-          <b-form-input v-model="setting.x5" type="number"></b-form-input>
+          <b-form-input v-model="setting.x5" type="number" required></b-form-input>
         </b-form-group>
 
         <b-form-group label-cols="2" description="كل إرسال يتغير لمسافرين جدد" label="اقصي عدد رسائل تنبية للطلب">
-          <b-form-input v-model="setting.x6" type="number"></b-form-input>
+          <b-form-input v-model="setting.x6" type="number" required></b-form-input>
         </b-form-group>
 
         <b-button class="mt-4 mb-4" type="submit" variant="success">حفظ التعديلات</b-button>

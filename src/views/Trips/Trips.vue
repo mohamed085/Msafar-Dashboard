@@ -48,8 +48,7 @@
               <th scope="col">نوع الرحلة</th>
               <th scope="col">مرحلة الرحلة</th>
               <th scope="col">تاريخ الإضافة</th>
-              <th scope="col">شات لم يتم الرد عليها</th>
-              <th scope="col">وقت اخر دخول</th>
+<!--              <th scope="col">شات لم يتم الرد عليها</th>-->
               <th scope="col">الرحلة</th>
             </tr>
             </thead>
@@ -75,10 +74,13 @@
                 </td>
                 <td>
                   <span v-for="related_request in res.related_requests" :key="related_request.id">
-                    {{ related_request.id }}
+                    {{ related_request.request_id }}
+                    <br>
                   </span>
                 </td>
-                <td>-</td>
+                <td>
+                  <span v-if="res.trip_category">{{ res.trip_category.categorie_name }}</span>
+                </td>
                 <td>
                   <span v-for="related_request in res.related_requests" :key="related_request.id" class="d-flex">
                     <span>{{ related_request.id }}</span> &nbsp;
@@ -110,9 +112,41 @@
                   <span v-if="res.created_at">{{ res.created_at }}</span>
                   <span v-else></span>
                 </td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
+<!--                <td>-->
+<!--                  <span v-if="res.masafr.chats.message_not_seen">-->
+<!--                    <span v-for="message_not_seen in res.masafr.chats.message_not_seen" :key="message_not_seen.id">-->
+<!--                      {{ message_not_seen.id }}-->
+<!--                      <br>-->
+<!--                    </span>-->
+<!--                  </span>-->
+<!--                </td>-->
+                <td>
+                  <span v-for="related_request in res.related_requests" :key="related_request.id" class="d-flex">
+                    <span>{{ related_request.id }}</span> &nbsp;
+                    <span v-if="related_request.offer_status === '-1'">
+                      <b-badge variant="danger">ملغي</b-badge>
+                    </span>
+                    <span v-else-if="related_request.offer_status === '0'">
+                      <b-badge variant="warning">منتهي</b-badge>
+                    </span>
+                    <span v-else-if="related_request.offer_status === '1'">
+                      <b-badge variant="info">فعال</b-badge>
+                    </span>
+                    <span v-else-if="related_request.offer_status === '2'">
+                      <b-badge variant="light" class="text-black">معلق</b-badge>
+                    </span>
+                    <span v-else-if="related_request.offer_status === '3'">
+                      <b-badge variant="secondary">جاري التاكيد</b-badge>
+                    </span>
+                    <span v-else-if="related_request.offer_status === '4'">
+                      <b-badge variant="primary">جاري التنفيذ</b-badge>
+                    </span>
+                    <span v-else-if="related_request.offer_status === '5'">
+                      <b-badge variant="success">منفذ</b-badge>
+                    </span>
+                    <br>
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -158,15 +192,10 @@ export default {
       const token = this.$store.getters.token;
 
       myHeaders.append("authToken", token)
+      myHeaders.append("Content-Type", "application/json");
 
       let raw = JSON.stringify({
-        "filter": 2,
-        "request_id": 1,
-        "trip_id": 1,
-        "phone": "012345678935667",
-        "from_place": "sh",
-        "to_place": "al",
-        "paginateCount": 10
+        "paginateCount": 100
       });
 
       let requestOptions = {
@@ -186,8 +215,7 @@ export default {
       }
 
       this.response = responseData.data.data
-      console.log(responseData)
-      console.log(this.response)
+
       this.spinner = false;
 
     },

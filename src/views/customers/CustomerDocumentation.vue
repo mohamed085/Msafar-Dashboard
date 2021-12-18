@@ -27,28 +27,6 @@
         </b-form>
       </div>
 
-
-      <h2 class="mt-2 mb-3">فرز</h2>
-      <div class="filters d-flex flex-wrap mb-3">
-
-        <div class="filter d-flex">
-          <b-form-checkbox></b-form-checkbox>
-          <span class="me-2 ms-2 mt-auto mb-auto">فرز بالاحداث</span>
-        </div>
-
-        <div class="filter d-flex">
-          <b-form-checkbox></b-form-checkbox>
-          <span class="me-2 ms-2 mt-auto mb-auto">فرز بالطلبات المرفوضة</span>
-        </div>
-
-        <div class="filter d-flex">
-          <b-form-checkbox></b-form-checkbox>
-          <span class="me-2 ms-2 mt-auto mb-auto">فرز بالطلبات المنتظرة</span>
-        </div>
-
-
-      </div>
-
       <h2 class="mt-4 mb-3">العملاء الموجودين</h2>
       <div class="table-responsive">
         <table class="table table-hover">

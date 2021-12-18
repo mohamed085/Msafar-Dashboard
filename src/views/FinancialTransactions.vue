@@ -67,7 +67,17 @@
                 <span v-if="res.request_trip.trip">{{ res.request_trip.trip.masafr.name }}</span>
               </router-link>
             </td>
-            <td>-</td>
+            <td>
+              <span v-for="fatoorah in res.fatoorah" :key="fatoorah.id">
+                <span v-if="fatoorah.type = 'fatoorahValue'">{{ fatoorah.fatoorahValue }}</span>
+              </span>
+            </td>
+            <td>
+              <span v-for="fatoorah in res.fatoorah" :key="fatoorah.id">
+                <span >{{ fatoorah.id }} --> {{ fatoorah.value }}</span>
+                <br>
+              </span>
+            </td>
             <td>
               <span v-if="res.request_trip.payment_method === '0'"><b-badge variant="danger">اونلاين</b-badge> </span>
               <span v-else-if="res.request_trip.payment_method === '1'"><b-badge variant="info">كاش</b-badge></span>
@@ -86,13 +96,14 @@
               <span v-if="res.request_trip.insurance_hold">{{ res.request_trip.insurance_hold }}</span>
             </td>
             <td>
-              <span v-if="res.request_trip.offer_status === '-1'">ملغي</span>
-              <span v-else-if="res.request_trip.offer_status === '0'">غير مربوط</span>
-              <span v-else-if="res.request_trip.offer_status === '1'">فعال</span>
-              <span v-else-if="res.request_trip.offer_status === '2'">معلق</span>
-              <span v-else-if="res.request_trip.offer_status === '3'">جاري التاكيد</span>
-              <span v-else-if="res.request_trip.offer_status === '4'">جاري التنفيذ</span>
-              <span v-else-if="res.request_trip.offer_status === '5'">منفذ</span>
+              <b-badge variant="danger" v-if="res.request_trip.offer_status === '-1'">ملغي</b-badge>
+              <b-badge variant="warning" v-else-if="res.request_trip.offer_status === '0'">غير مربوط</b-badge>
+              <b-badge variant="success" v-else-if="res.request_trip.offer_status === '1'">فعال</b-badge>
+              <b-badge variant="primary" v-else-if="res.request_trip.offer_status === '2'">معلق</b-badge>
+              <b-badge variant="secondary" v-else-if="res.request_trip.offer_status === '3'">جاري التاكيد</b-badge>
+              <b-badge variant="info" v-else-if="res.request_trip.offer_status === '4'">جاري التنفيذ</b-badge>
+              <b-badge variant="light" class="text-black" v-else-if="res.request_trip.offer_status === '5'">منفذ</b-badge>
+
             </td>
           </tr>
           </tbody>
@@ -157,6 +168,17 @@ export default {
       }
 
       this.response = responseData
+
+      this.response.data.forEach(data => {
+        let fatoorahValue = 0
+        data.fatoorah.forEach(fatoorah => {
+          fatoorahValue += parseInt(fatoorah.value)
+        })
+        data.fatoorah.push({
+          fatoorahValue: fatoorahValue,
+          type: 'fatoorahValue'
+        })
+      })
 
       this.spinner = false;
 

@@ -8,7 +8,7 @@
       <div class="col-10">
         <div class="row">
           <div class="col-6 d-flex">
-            <avatar></avatar>
+            <b-avatar size="8rem" :src="data.photo"></b-avatar>
             <h3 class="mt-auto mb-auto ms-3">البيانات السابقة</h3>
           </div>
           <div class="col-6 d-flex">
@@ -21,7 +21,7 @@
           <div class="col-6">
             <div class="cars-image d-flex justify-content-center m-3">
               <div class="car-image d-flex flex-column ms-3">
-                <b-avatar variant="info" size="5rem" src="https://placekitten.com/300/300"></b-avatar>
+                <b-avatar variant="info" size="5rem" :src="data.photo"></b-avatar>
                 <b-button class="btn-sm mt-2 fas fa-plus" variant="outline-success"></b-button>
               </div>
               <div class="car-image d-flex flex-column ms-2">
@@ -187,10 +187,53 @@ export default {
   },
   data() {
     return {
+      data: ''
     }
   },
+  created() {
+    if (!this.$store.getters.isAuthenticated) {
+      this.$router.replace("/login")
+    }
+    this.loadTravellerInfo(this.$route.params.id);
+  },
   methods: {
-    
+    async loadTravellerInfo(id) {
+      this.spinner = true;
+
+      let myHeaders = new Headers();
+
+      const token = this.$store.getters.token;
+
+      myHeaders.append("authToken", token)
+      myHeaders.append("Content-Type", "application/json");
+
+      let raw = JSON.stringify({
+        "user_id": id
+      });
+
+      let requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      let url = "https://msafr.we-work.pro/api/auth/admin/get-user-info"
+
+      const response = await fetch(url, requestOptions);
+
+      const responseData = await response.json();
+
+      this.data = responseData.data;
+
+      if (!this.data) {
+        await this.$router.replace("/404")
+      }
+
+      console.log(this.data)
+
+      this.spinner = false
+    },
   }
 }
 </script>

@@ -72,7 +72,7 @@
              </td>
              <td>
                 <span v-if="res.trip">
-                  <router-link :to="'/user/' + res.trip.masafr.i">{{ res.trip.masafr.name }}</router-link>
+                  <router-link :to="'/traveller/' + res.trip.masafr.id">{{ res.trip.masafr.name }}</router-link>
                 </span>
              </td>
              <td>

@@ -125,7 +125,7 @@
               <tr v-for="res in response" :key="res.id">
                 <td></td>
                 <td>
-                  <img :src="res.photo" v-if="res.photo"/>
+                  <b-avatar size="4rem" :src="res.photo" v-if="res.photo"/>
                   <span v-else>-</span>
                 </td>
                 <td>

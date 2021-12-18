@@ -26,8 +26,17 @@
           </thead>
           <tbody>
             <tr v-for="res in response.data" :key="res.id">
-              <td>{{ res.persons }}</td>
-              <td>{{ res.persons }}</td>
+              <td>
+                <span v-for="person in res.persons" :key="person.id">
+                  <span v-if="person.user">{{ person.user.name }}</span>
+                </span>
+              </td>
+              <td>
+                 <span v-for="person in res.persons" :key="person.id">
+                   <span v-if="person.masafr">{{ person.masafr.name }}</span>
+                    {{ person.masafr.id }}
+                </span>
+              </td>
               <td>-</td>
               <td>{{ res.title }}</td>
               <td>{{ res.subject }}</td>

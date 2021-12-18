@@ -26,11 +26,11 @@
                   <i class="far fa-file"></i>كل الرحلات
                 </router-link>
               </li>
-              <li class="nav-item">
-                <router-link to="/add-new-trip-section" exact class="nav-link" aria-current="page">
-                  <i class="fas fa-plus"></i>اضافة اقسام رحلات
-                </router-link>
-              </li>
+<!--              <li class="nav-item">-->
+<!--                <router-link to="/add-new-trip-section" exact class="nav-link" aria-current="page">-->
+<!--                  <i class="fas fa-plus"></i>اضافة اقسام رحلات-->
+<!--                </router-link>-->
+<!--              </li>-->
             </ul>
           </div>
 
@@ -112,11 +112,11 @@
                   <i class="fas fa-users"></i>كل العملاء
                 </router-link>
               </li>
-              <li class="nav-item">
-                <router-link to="/add-new-customer" exact class="nav-link" aria-current="page">
-                  <i class="fas fa-plus"></i>اضافة عميل جديد
-                </router-link>
-              </li>
+<!--              <li class="nav-item">-->
+<!--                <router-link to="/add-new-customer" exact class="nav-link" aria-current="page">-->
+<!--                  <i class="fas fa-plus"></i>اضافة عميل جديد-->
+<!--                </router-link>-->
+<!--              </li>-->
               <li class="nav-item">
                 <router-link to="/customers-documentation" exact class="nav-link" aria-current="page">
                   <i class="fas fa-user"></i>توثيق العملاء
@@ -138,16 +138,16 @@
           </div>
           <div v-if="displayInvoiceSubItem" class="ms-3">
             <ul class="nav flex-column">
-              <li class="nav-item">
-                <router-link to="#" exact class="nav-link" aria-current="page">
-                  <i class="fas fa-users"></i>سحب رصيد
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="#" exact class="nav-link" aria-current="page">
-                  <i class="fas fa-plus"></i>اضافة رصيد
-                </router-link>
-              </li>
+<!--              <li class="nav-item">-->
+<!--                <router-link to="#" exact class="nav-link" aria-current="page">-->
+<!--                  <i class="fas fa-users"></i>سحب رصيد-->
+<!--                </router-link>-->
+<!--              </li>-->
+<!--              <li class="nav-item">-->
+<!--                <router-link to="#" exact class="nav-link" aria-current="page">-->
+<!--                  <i class="fas fa-plus"></i>اضافة رصيد-->
+<!--                </router-link>-->
+<!--              </li>-->
               <li class="nav-item">
                 <router-link to="/invoices" exact class="nav-link" aria-current="page">
                   <i class="fas fa-user"></i>الفواتير
