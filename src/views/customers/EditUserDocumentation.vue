@@ -9,103 +9,117 @@
     </div>
 
     <div v-else class="row">
-      <div class="col-10">
-        <div class="row">
-          <div class="col-6 d-flex">
-            <b-avatar size="8rem" :src="data1.photo"></b-avatar>
-            <h3 class="mt-auto mb-auto ms-3">البيانات السابقة</h3>
-          </div>
-          <div class="col-6 d-flex">
-            <b-avatar size="8rem" :src="data2.photo"></b-avatar>
-            <h3 class="mt-auto mb-auto ms-3">البيانات الجديدة</h3>
-          </div>
+      <div v-if="msg">
+        <h3 class="mb-4">{{ msg }}</h3>
+        <div v-if="status">
+          <router-link class="ads-link" to="/ads">الاعلانات</router-link>
         </div>
 
-        <div class="row mt-2">
-          <div class="col-6">
-            <div class="car-details">
-              <div class="row m-2">
-                <div class="col-4">
-                  <span>رقم الهوية</span>
-                </div>
-                <div class="col-8">
-                  <input type="text" v-model="data1.id" class="form-control" placeholder="رقم الهوية" readonly>
-                </div>
-              </div>
-              <div class="row m-2">
-                <div class="col-4">
-                  <span>البريد الالكتروني</span>
-                </div>
-                <div class="col-8">
-                  <input type="text" v-model="data1.email" class="form-control" placeholder="البريد الالكتروني" readonly>
-                </div>
-              </div>
-              <div class="row m-2">
-                <div class="col-4">
-                  <span>الاسم</span>
-                </div>
-                <div class="col-8">
-                  <input type="text" v-model="data1.name" class="form-control" placeholder="الاسم" readonly>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="car-details">
-              <div class="row m-2">
-                <div class="col-4">
-                  <span>رقم الهوية</span>
-                </div>
-                <div class="col-8">
-                  <input type="text" v-model="data2.id" class="form-control" placeholder="رقم الهوية" readonly>
-                </div>
-              </div>
-              <div class="row m-2">
-                <div class="col-4">
-                  <span>البريد الالكتروني</span>
-                </div>
-                <div class="col-8">
-                  <input type="text" v-model="data2.email" class="form-control" placeholder="البريد الالكتروني" readonly>
-                </div>
-              </div>
-              <div class="row m-2">
-                <div class="col-4">
-                  <span>الاسم</span>
-                </div>
-                <div class="col-8">
-                  <input type="text" v-model="data2.name" class="form-control" placeholder="الاسم" readonly>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col">
-            <b-textarea class="m-3" rows="4" placeholder="ملاحظات المشرف"></b-textarea>
-          </div>
+        <div v-else-if="!status">
+          <span class="ads-link" @click="refreshLink">اضافة الاعلان مرة اخري</span>
         </div>
       </div>
 
-      <div class="col-2 d-flex flex-column justify-content-center align-items-center">
-        <b-form>
-          <b-form-group @submit.prevent="saveChanges">
-            <div class="d-flex">
-              <b-form-radio v-model="trust" name="some-radios" value="true" required></b-form-radio>
-              <h4><b-badge class="ms-2 p-2" variant="success">قبول التوثيق</b-badge></h4>
+      <div v-else>
+
+        <div class="col-10">
+          <div class="row">
+            <div class="col-6 d-flex">
+              <b-avatar size="8rem" :src="data1.photo"></b-avatar>
+              <h3 class="mt-auto mb-auto ms-3">البيانات السابقة</h3>
             </div>
-            <div class="d-flex mt-2">
-              <b-form-radio v-model="trust" name="some-radios" value="false" required></b-form-radio>
-              <h4><b-badge class="ms-2 p-2 " variant="danger">رفض التوثيق</b-badge></h4>
+            <div class="col-6 d-flex">
+              <b-avatar size="8rem" :src="data2.photo"></b-avatar>
+              <h3 class="mt-auto mb-auto ms-3">البيانات الجديدة</h3>
             </div>
-          </b-form-group>
+          </div>
 
-          <b-textarea rows="5" placeholder="الاسباب"></b-textarea>
+          <div class="row mt-2">
+            <div class="col-6">
+              <div class="car-details">
+                <div class="row m-2">
+                  <div class="col-4">
+                    <span>رقم الهوية</span>
+                  </div>
+                  <div class="col-8">
+                    <input type="text" v-model="data1.id" class="form-control" placeholder="رقم الهوية" readonly>
+                  </div>
+                </div>
+                <div class="row m-2">
+                  <div class="col-4">
+                    <span>البريد الالكتروني</span>
+                  </div>
+                  <div class="col-8">
+                    <input type="text" v-model="data1.email" class="form-control" placeholder="البريد الالكتروني" readonly>
+                  </div>
+                </div>
+                <div class="row m-2">
+                  <div class="col-4">
+                    <span>الاسم</span>
+                  </div>
+                  <div class="col-8">
+                    <input type="text" v-model="data1.name" class="form-control" placeholder="الاسم" readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="car-details">
+                <div class="row m-2">
+                  <div class="col-4">
+                    <span>رقم الهوية</span>
+                  </div>
+                  <div class="col-8">
+                    <input type="text" v-model="data2.id" class="form-control" placeholder="رقم الهوية" readonly>
+                  </div>
+                </div>
+                <div class="row m-2">
+                  <div class="col-4">
+                    <span>البريد الالكتروني</span>
+                  </div>
+                  <div class="col-8">
+                    <input type="text" v-model="data2.email" class="form-control" placeholder="البريد الالكتروني" readonly>
+                  </div>
+                </div>
+                <div class="row m-2">
+                  <div class="col-4">
+                    <span>الاسم</span>
+                  </div>
+                  <div class="col-8">
+                    <input type="text" v-model="data2.name" class="form-control" placeholder="الاسم" readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <b-form-checkbox switch v-model="accept" size="lg" class="mt-4">قبول التعديلات</b-form-checkbox>
+          <div class="row">
+            <div class="col">
+              <b-textarea class="m-3" rows="4" placeholder="ملاحظات المشرف"></b-textarea>
+            </div>
+          </div>
+        </div>
 
-          <b-button type="submit" class="w-100 mt-4" variant="outline-success">حفظ</b-button>
-        </b-form>
+        <div class="col-2 d-flex flex-column justify-content-center align-items-center">
+          <b-form>
+            <b-form-group @submit.prevent="saveChanges">
+              <div class="d-flex">
+                <b-form-radio v-model="trust" name="some-radios" value="true" required></b-form-radio>
+                <h4><b-badge class="ms-2 p-2" variant="success">قبول التوثيق</b-badge></h4>
+              </div>
+              <div class="d-flex mt-2">
+                <b-form-radio v-model="trust" name="some-radios" value="false" required></b-form-radio>
+                <h4><b-badge class="ms-2 p-2 " variant="danger">رفض التوثيق</b-badge></h4>
+              </div>
+            </b-form-group>
+
+            <b-textarea rows="5" placeholder="الاسباب"></b-textarea>
+
+            <b-form-checkbox switch v-model="accept" size="lg" class="mt-4">قبول التعديلات</b-form-checkbox>
+
+            <b-button type="submit" class="w-100 mt-4" variant="outline-success">حفظ</b-button>
+          </b-form>
+        </div>
       </div>
     </div>
 
@@ -125,7 +139,7 @@ export default {
       trust: '',
       accept: '',
       spinner: false,
-      status: '',
+      status: false,
       msg: ''
     }
   },
@@ -224,10 +238,10 @@ export default {
 
       if (responseData.status) {
         this.status = true
-        this.msg = 'تم إضافة الاعلان بنجاح'
+        this.msg = 'تم تعديل البيانات بنجاح'
       } else {
         this.status = false
-        this.msg = 'لم يتم اضافة الاعلان'
+        this.msg = 'لم يتم تعديل البيانات'
       }
 
     },
