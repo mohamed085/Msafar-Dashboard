@@ -16,8 +16,6 @@
             <i class="fas fa-chevron-down"></i>
             <b-avatar class="ms-2"></b-avatar>
           </template>
-          <b-dropdown-item>الصفحة الشخصية</b-dropdown-item>
-          <b-dropdown-item>تعديل الصفحة الشخصية</b-dropdown-item>
           <b-dropdown-item @click="logout">تسجيل الخروج</b-dropdown-item>
         </b-dropdown>
       </div>

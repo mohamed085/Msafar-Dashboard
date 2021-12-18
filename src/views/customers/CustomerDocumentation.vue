@@ -51,11 +51,12 @@
                 <b-avatar :src="res.id_photo"></b-avatar>
               </td>
               <td>
-                <router-link :to="'/user/' + res.id">{{ res.name }}</router-link>
+                <router-link v-if="res.type == 0" :to="'/user/' + res.person_id">{{ res.name }}</router-link>
+                <router-link v-if="res.type == 1" :to="'/traveller/' + res.person_id">{{ res.name }}</router-link>
               </td>
               <td>
-                <span v-if="res.type === 0">عميل</span>
-                <span v-if="res.type === 1">مسافر</span>
+                <span v-if="res.type == 0">عميل</span>
+                <span v-if="res.type == 1">مسافر</span>
               </td>
               <td>
                 <b-badge variant="warning" v-if="res.update_type == 0">بيانات</b-badge>
@@ -73,7 +74,7 @@
               <td>{{ res.decision_maker }}</td>
               <td>{{ res.created_at }}</td>
               <td class="d-flex icons">
-                <router-link :to="'/edit-customer-documentation/' + res.id "><i class="fas fa-user-edit"></i></router-link>
+                <router-link :to="'/edit-customer-documentation/' + res.type + '/' + res.person_id "><i class="fas fa-user-edit"></i></router-link>
               </td>
             </tr>
           </tbody>
@@ -119,6 +120,7 @@ export default {
       const token = this.$store.getters.token;
 
       myHeaders.append("authToken", token)
+      myHeaders.append("Content-Type", "application/json");
 
       let raw = JSON.stringify({
       });
@@ -139,8 +141,6 @@ export default {
       }
 
       this.responseData = responseData.data.data
-
-      console.log(this.responseData)
 
       this.spinner = false;
 

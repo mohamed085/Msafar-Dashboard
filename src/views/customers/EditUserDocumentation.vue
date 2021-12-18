@@ -29,7 +29,7 @@
               <h3 class="mt-auto mb-auto ms-3">البيانات السابقة</h3>
             </div>
             <div class="col-6 d-flex">
-              <b-avatar size="8rem" :src="data2.photo"></b-avatar>
+              <b-avatar v-if="data1.photo" size="8rem" :src="data2.photo"></b-avatar>
               <h3 class="mt-auto mb-auto ms-3">البيانات الجديدة</h3>
             </div>
           </div>
@@ -161,7 +161,8 @@ export default {
       myHeaders.append("Content-Type", "application/json");
 
       let raw1 = JSON.stringify({
-        "user_id": id
+        "user_id": id,
+        "masafr_id": id
       });
 
       let requestOptions1 = {
@@ -171,10 +172,9 @@ export default {
         redirect: 'follow'
       };
 
-
       let raw2 = JSON.stringify({
         "person_id": id,
-        "type": 0
+        "type": this.$route.params.type
       });
 
       let requestOptions2 = {
@@ -185,7 +185,16 @@ export default {
       };
 
 
-      let url1 = "https://msafr.we-work.pro/api/auth/admin/get-user-info"
+      let url1 = ''
+      if (this.$route.params.type == 0) {
+        url1 = "https://msafr.we-work.pro/api/auth/admin/get-user-info"
+      } else if (this.$route.params.type == 1) {
+        url1 = "https://msafr.we-work.pro/api/auth/admin/get-masafr-info"
+      } else {
+        alert("asd")
+        await this.$router.replace("/404")
+      }
+
       let url2 = "https://msafr.we-work.pro/api/auth/admin/get-person-update-queue"
 
       const response1 = await fetch(url1, requestOptions1);
@@ -196,6 +205,8 @@ export default {
 
       this.data1 = responseData1.data;
       this.data2 = responseData2.data;
+
+      console.log(this.data1)
 
       if (!this.data1) {
         await this.$router.replace("/404")
@@ -217,7 +228,7 @@ export default {
 
       let raw = JSON.stringify({
         "person_id": this.$route.params.id,
-        "type": 0,
+        "type": this.$route.params.type,
         "trust": Number(this.trust),
         "accept": Number(this.accept)
       });
