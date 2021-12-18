@@ -12,11 +12,11 @@
       <div v-if="msg">
         <h3 class="mb-4">{{ msg }}</h3>
         <div v-if="status">
-          <router-link class="ads-link" to="/ads">الاعلانات</router-link>
+          <router-link class="ads-link" to="/customers-documentation">الاعلانات</router-link>
         </div>
 
         <div v-else-if="!status">
-          <span class="ads-link" @click="refreshLink">اضافة الاعلان مرة اخري</span>
+          <span class="ads-link" @click="refreshLink">تعديل البيانات مرة اخري</span>
         </div>
       </div>
 
@@ -101,8 +101,8 @@
         </div>
 
         <div class="col-2 d-flex flex-column justify-content-center align-items-center">
-          <b-form>
-            <b-form-group @submit.prevent="saveChanges">
+          <b-form @submit.prevent="saveChanges">
+            <b-form-group >
               <div class="d-flex">
                 <b-form-radio v-model="trust" name="some-radios" value="true" required></b-form-radio>
                 <h4><b-badge class="ms-2 p-2" variant="success">قبول التوثيق</b-badge></h4>
@@ -256,6 +256,10 @@ export default {
       }
 
     },
+    refreshLink() {
+      this.msg = ''
+      this.status = false
+    }
   }
 }
 </script>
