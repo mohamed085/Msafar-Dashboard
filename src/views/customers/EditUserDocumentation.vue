@@ -34,6 +34,92 @@
             </div>
           </div>
 
+          <div class="row mt-2" v-if="traveller">
+            <div class="col-6">
+              <div class="cars-image d-flex justify-content-center m-3">
+                <div class="car-image d-flex flex-column ms-3">
+                  <b-avatar variant="info" text="car" size="5rem" :src="data1.car_image_east"></b-avatar>
+                </div>
+                <div class="car-image d-flex flex-column ms-2">
+                  <b-avatar variant="info" text="car" size="5rem" :src="data1.car_image_west"></b-avatar>
+                </div>
+                <div class="car-image d-flex flex-column ms-2">
+                  <b-avatar variant="info" text="car" size="5rem" :src="data1.car_image_north"></b-avatar>
+                </div>
+                <div class="car-image d-flex flex-column ms-2">
+                  <b-avatar variant="info" text="car" size="5rem" :src="data1.driving_license_photo"></b-avatar>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="cars-image d-flex justify-content-center m-3">
+                <div class="car-image d-flex flex-column ms-3">
+                  <b-avatar variant="info" text="car" size="5rem" :src="data2.car_image_east"></b-avatar>
+                </div>
+                <div class="car-image d-flex flex-column ms-2">
+                  <b-avatar variant="info" text="car" size="5rem" :src="data2.car_image_west"></b-avatar>
+                </div>
+                <div class="car-image d-flex flex-column ms-2">
+                  <b-avatar variant="info" text="car" size="5rem" :src="data2.car_image_north"></b-avatar>
+                </div>
+                <div class="car-image d-flex flex-column ms-2">
+                  <b-avatar variant="info" text="car" size="5rem" :src="data2.driving_license_photo"></b-avatar>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-2" v-if="traveller">
+            <div class="col-6">
+              <div class="car-details">
+                <div class="row m-2">
+                  <div class="col">
+                    <span class="ms-2">اسم السيارة</span>
+                    <input type="text" class="form-control" v-model="data1.car_name" placeholder="اسم السيارة">
+                  </div>
+                  <div class="col">
+                    <span class="ms-2">موديل السياره</span>
+                    <input type="text" class="form-control" v-model="data1.car_model" placeholder="الموديل">
+                  </div>
+                </div>
+                <div class="row m-2">
+                  <div class="col">
+                    <span class="ms-2">رقم السيارة</span>
+                    <input type="text" class="form-control" v-model="data1.car_number" placeholder="رقم السيارة">
+                  </div>
+                  <div class="col">
+                    <span class="ms-2">الجنسية</span>
+                    <input type="text" class="form-control" v-model="data1.nationality" placeholder="الجنسية">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="car-details">
+                <div class="row m-2">
+                  <div class="col">
+                    <span class="ms-2">اسم السيارة</span>
+                    <input type="text" class="form-control" v-model="data2.car_name" placeholder="اسم السيارة">
+                  </div>
+                  <div class="col">
+                    <span class="ms-2">موديل السياره</span>
+                    <input type="text" class="form-control" v-model="data2.car_model" placeholder="الموديل">
+                  </div>
+                </div>
+                <div class="row m-2">
+                  <div class="col">
+                    <span class="ms-2">رقم السيارة</span>
+                    <input type="text" class="form-control" v-model="data2.car_number" placeholder="رقم السيارة">
+                  </div>
+                  <div class="col">
+                    <span class="ms-2">الجنسية</span>
+                    <input type="text" class="form-control" v-model="data2.nationality" placeholder="الجنسية">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="row mt-2">
             <div class="col-6">
               <div class="car-details">
@@ -140,12 +226,16 @@ export default {
       accept: '',
       spinner: false,
       status: false,
-      msg: ''
+      msg: '',
+      traveller: false
     }
   },
   created() {
     if (!this.$store.getters.isAuthenticated) {
       this.$router.replace("/login")
+    }
+    if (this.$route.params.type == 1) {
+      this.traveller = true
     }
     this.loadTravellerInfo(this.$route.params.id);
   },
@@ -205,8 +295,6 @@ export default {
 
       this.data1 = responseData1.data;
       this.data2 = responseData2.data;
-
-      console.log(this.data1)
 
       if (!this.data1) {
         await this.$router.replace("/404")
