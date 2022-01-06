@@ -16,10 +16,8 @@
           <tr class="bg-success text-white">
             <th scope="col">رأها </th>
             <th scope="col">اسم المستقبل</th>
-            <th scope="col"> اخر دخول</th>
-            <th scope="col">عنوان النافذة</th>
+<!--            <th scope="col">عنوان النافذة</th>-->
             <th scope="col">محتوى  النافذة</th>
-            <th scope="col">تاريخ الاضافه</th>
             <th scope="col">تاريخ الاضافه</th>
             <th scope="col">وقت المشاهدة</th>
           </tr>
@@ -28,19 +26,30 @@
             <tr v-for="res in response.data" :key="res.id">
               <td>
                 <span v-for="person in res.persons" :key="person.id">
-                  <span v-if="person.user">{{ person.user.name }}</span>
+                  <b-badge variant="danger" v-if="person.showed == 1">مشاهدة</b-badge>
+                  <b-badge variant="success" v-else-if="person.showed == 0">انتظار</b-badge>
+                  <br>
                 </span>
               </td>
               <td>
-                 <span v-for="person in res.persons" :key="person.id">
-                   <span v-if="person.masafr">{{ person.masafr.name }}</span>
-                    {{ person.masafr.id }}
+                <span v-for="person in res.persons" :key="person.id">
+                  <span v-if="res.type == 0">
+                    <router-link v-if="person.user" :to="'/user/' + person.user.id">{{ person.user.name }}</router-link>
+                    <br>
+                  </span>
+                  <span v-else-if="res.type == 1">
+                    <router-link v-if="person.masafr" :to="'/traveller/' + person.masafr.id">{{ person.masafr.name }}</router-link>
+                    <br>
+                  </span>
                 </span>
               </td>
-              <td>-</td>
-              <td>{{ res.title }}</td>
+<!--              <td>{{ res.title }}</td>-->
               <td>{{ res.subject }}</td>
               <td>{{ res.created_at }}</td>
+              <td>
+                <span v-for="person in res.persons" :key="person.id">{{ person.seen_time }}</span>
+                <br>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -92,16 +101,15 @@ name: "Windows",
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
 
-
-      if (!response.ok) {
-        const error = new Error(responseData.message || 'Failed to fetch!');
-        throw error;
-      }
-
       this.response = responseData
 
-      console.log(responseData)
-      console.log(this.response)
+      if (this.response.data.length > 0) {
+        this.response.data.forEach(e => {
+          if (!e.persons.length > 0) {
+            e.persons.push({"id" : Date.now()})
+          }
+        })
+      }
 
       this.spinner = false;
 
@@ -117,4 +125,18 @@ name: "Windows",
 h1, h2 {
   font-family: 'Almarai', sans-serif;
 }
+
+a, .a {
+  color: #111111;
+  text-decoration: none;
+  padding: 2px 5px;
+  cursor: pointer;
+}
+
+a:hover, .a:hover {
+  color: #198754 !important;
+  border-bottom: 1px solid #198754;
+  padding: 2px 5px;
+}
+
 </style>

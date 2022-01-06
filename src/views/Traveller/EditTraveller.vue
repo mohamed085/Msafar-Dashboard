@@ -94,7 +94,7 @@
 
 <script>
 export default {
-  name: "EditCustomer",
+  name: "EditTraveller",
   data() {
     return {
       data: '',
@@ -108,7 +108,7 @@ export default {
     }
   },
   created() {
-    this.loadUserInfo(this.$route.params.id)
+    this.loadTravellerInfo(this.$route.params.id)
   },
   methods: {
     async save() {
@@ -120,7 +120,7 @@ export default {
       myHeaders.append("authToken", token);
 
       let formdata = new FormData();
-      formdata.append("user_id", this.$route.params.id);
+      formdata.append("masafr_id", this.$route.params.id);
       formdata.append("name", this.data.name);
       formdata.append("password", this.password);
       formdata.append("email", this.data.email);
@@ -138,7 +138,7 @@ export default {
         redirect: 'follow'
       };
 
-      const response = await fetch("https://msafr.we-work.pro/api/auth/admin/update-user", requestOptions);
+      const response = await fetch("https://msafr.we-work.pro/api/auth/admin/update-masafr", requestOptions);
 
       const responseData = await response.json();
 
@@ -147,8 +147,6 @@ export default {
       } else {
         this.msg = "لم يتم تعديل البيانات بنجاح"
       }
-
-      console.log(responseData)
 
       this.spinner = false
     },
@@ -177,7 +175,7 @@ export default {
       }
 
     },
-    async loadUserInfo(id) {
+    async loadTravellerInfo(id) {
       this.spinner = true;
 
       let myHeaders = new Headers();
@@ -188,7 +186,7 @@ export default {
       myHeaders.append("Content-Type", "application/json");
 
       let raw = JSON.stringify({
-        "user_id": id
+        "masafr_id": id
       });
 
       let requestOptions = {
@@ -198,7 +196,7 @@ export default {
         redirect: 'follow'
       };
 
-      let url = "https://msafr.we-work.pro/api/auth/admin/get-user-info"
+      let url = "https://msafr.we-work.pro/api/auth/admin/get-masafr-info"
 
       const response = await fetch(url, requestOptions);
 
@@ -209,6 +207,8 @@ export default {
       if (!this.data) {
         await this.$router.replace("/404")
       }
+
+      console.log(this.data)
 
       this.spinner = false
 

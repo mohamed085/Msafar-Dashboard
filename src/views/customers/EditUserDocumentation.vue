@@ -12,7 +12,7 @@
       <div v-if="msg">
         <h3 class="mb-4">{{ msg }}</h3>
         <div v-if="status">
-          <router-link class="ads-link" to="/customers-documentation">الاعلانات</router-link>
+          <router-link class="ads-link" to="/customers-documentation">توثيق العملاء</router-link>
         </div>
 
         <div v-else-if="!status">
@@ -25,11 +25,11 @@
         <div class="col-10">
           <div class="row">
             <div class="col-6 d-flex">
-              <b-avatar size="8rem" :src="data1.photo"></b-avatar>
+              <b-avatar size="8rem" :src="data1.id_photo"></b-avatar>
               <h3 class="mt-auto mb-auto ms-3">البيانات السابقة</h3>
             </div>
             <div class="col-6 d-flex">
-              <b-avatar v-if="data1.photo" size="8rem" :src="data2.photo"></b-avatar>
+              <b-avatar v-if="data1.id_photo" size="8rem" :src="data2.id_photo"></b-avatar>
               <h3 class="mt-auto mb-auto ms-3">البيانات الجديدة</h3>
             </div>
           </div>
@@ -128,7 +128,7 @@
                     <span>رقم الهوية</span>
                   </div>
                   <div class="col-8">
-                    <input type="text" v-model="data1.id" class="form-control" placeholder="رقم الهوية" readonly>
+                    <input type="text" v-model="data1.national_id_number" class="form-control" placeholder="رقم الهوية" readonly>
                   </div>
                 </div>
                 <div class="row m-2">
@@ -156,7 +156,7 @@
                     <span>رقم الهوية</span>
                   </div>
                   <div class="col-8">
-                    <input type="text" v-model="data2.id" class="form-control" placeholder="رقم الهوية" readonly>
+                    <input type="text" v-model="data2.national_id_number" class="form-control" placeholder="رقم الهوية" readonly>
                   </div>
                 </div>
                 <div class="row m-2">
@@ -179,27 +179,22 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="col">
-              <b-textarea class="m-3" rows="4" placeholder="ملاحظات المشرف"></b-textarea>
-            </div>
-          </div>
         </div>
 
         <div class="col-2 d-flex flex-column justify-content-center align-items-center">
           <b-form @submit.prevent="saveChanges">
             <b-form-group >
               <div class="d-flex">
-                <b-form-radio v-model="trust" name="some-radios" value="true" required></b-form-radio>
+                <b-form-radio v-model="trust" name="some-radios" value="1" required></b-form-radio>
                 <h4><b-badge class="ms-2 p-2" variant="success">قبول التوثيق</b-badge></h4>
               </div>
               <div class="d-flex mt-2">
-                <b-form-radio v-model="trust" name="some-radios" value="false" required></b-form-radio>
+                <b-form-radio v-model="trust" name="some-radios" value="0" required></b-form-radio>
                 <h4><b-badge class="ms-2 p-2 " variant="danger">رفض التوثيق</b-badge></h4>
               </div>
             </b-form-group>
 
-            <b-textarea rows="5" placeholder="الاسباب"></b-textarea>
+            <b-textarea rows="5" v-model="reason" placeholder="الاسباب" required></b-textarea>
 
             <b-form-checkbox switch v-model="accept" size="lg" class="mt-4">قبول التعديلات</b-form-checkbox>
 
@@ -224,6 +219,7 @@ export default {
       data2: '',
       trust: '',
       accept: '',
+      reason: '',
       spinner: false,
       status: false,
       msg: '',
@@ -274,7 +270,6 @@ export default {
         redirect: 'follow'
       };
 
-
       let url1 = ''
       if (this.$route.params.type == 0) {
         url1 = "https://msafr.we-work.pro/api/auth/admin/get-user-info"
@@ -317,8 +312,9 @@ export default {
       let raw = JSON.stringify({
         "person_id": this.$route.params.id,
         "type": this.$route.params.type,
-        "trust": Number(this.trust),
-        "accept": Number(this.accept)
+        "trust": this.trust,
+        "accept": Number(this.accept),
+        "reason": this.reason
       });
 
       let requestOptions = {
@@ -326,7 +322,7 @@ export default {
         headers: myHeaders,
         body: raw,
         redirect: 'follow'
-      };
+      }
 
       let url = "https://msafr.we-work.pro/api/auth/admin/response-update-queue"
 

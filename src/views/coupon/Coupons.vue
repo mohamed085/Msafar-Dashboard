@@ -4,6 +4,13 @@
       <h1>الكوبونات</h1>
     </div>
 
+    <b-modal id="my-modal" hide-footer>
+      <div class="d-block text-center">
+        <h3>{{ msg }}</h3>
+      </div>
+    </b-modal>
+
+
     <h2 class="mt-4 mb-3">الكوبونات الموجودة</h2>
     <button @click="addNewCoupon" type="button" class="btn btn-sm btn-outline-success mb-3"><i class="far fa-plus"></i> إضافة كوبون جديد</button>
 
@@ -42,7 +49,9 @@
             <td>{{ res.used }}</td>
             <td>{{ res.created_at }}</td>
             <td class="d-flex icons">
-              <router-link :to="'/edit-coupon/' + res.id"><i class="fas fa-edit"></i></router-link></td>
+              <router-link :to="'/edit-coupon/' + res.id"><i class="fas fa-edit"></i></router-link> |
+              <span class="a" @click="deleteUser(res.id)"><i class="fas fa-trash"></i></span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -60,7 +69,8 @@ export default {
   data() {
     return {
       spinner: false,
-      response: ''
+      response: '',
+      msg: ''
     }
   },
   created() {
@@ -89,16 +99,7 @@ export default {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
 
-
-      if (!response.ok) {
-        const error = new Error(responseData.message || 'Failed to fetch!');
-        throw error;
-      }
-
       this.response = responseData
-
-      console.log(responseData)
-      console.log(this.response)
 
       this.spinner = false;
 
@@ -108,6 +109,49 @@ export default {
     },
     addNewCoupon() {
       router.push('/add-new-coupon')
+    },
+    async deleteUser(id) {
+      this.spinner = true
+      this.response = ''
+
+      const url = 'https://msafr.we-work.pro/api/auth/admin/delete-copon';
+
+      let myHeaders = new Headers();
+      const token = this.$store.getters.token;
+
+      myHeaders.append("authToken", token)
+      myHeaders.append("Content-Type", "application/json");
+
+      let raw = JSON.stringify({
+        "copon_id": id
+      });
+
+      let requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      const response = await fetch(url, requestOptions);
+
+      const responseData = await response.json();
+
+      if (responseData.status) {
+        this.status = true
+        this.msg = 'تم الحذف بنجاح'
+      } else {
+        this.status = false
+        this.msg = 'لم يتم الحذف'
+      }
+
+      this.$bvModal.show("my-modal")
+
+      this.spinner = false
+
+      await this.loadData()
+
+
     }
   }
 }
@@ -126,5 +170,20 @@ h1, h2 {
 .table .icons a:hover {
   color: #0a53be;
 }
+
+a, .a {
+  color: #111111;
+  text-decoration: none;
+  padding: 2px 5px;
+  cursor: pointer;
+}
+
+a:hover, .a:hover {
+  color: #198754 !important;
+  border-bottom: 1px solid #198754;
+  padding: 2px 5px;
+}
+
+
 
 </style>

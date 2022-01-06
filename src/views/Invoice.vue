@@ -27,11 +27,11 @@
           <tbody>
             <tr v-for="res in response.data" :key="res.id">
               <td>
-                <span v-if="res.request_trip.request">{{ res.request_trip.request.user.name }}</span>
+                <span v-if="res.request_trip">{{ res.request_trip.request.user.name }}</span>
                 <span v-else>-</span>
               </td>
               <td>
-                <span v-if="res.request_trip.trip">{{  res.request_trip.trip.masafr.name }}</span>
+                <span v-if="res.request_trip">{{  res.request_trip.trip.masafr.name }}</span>
                 <span v-else>-</span>
               </td>
               <td>
@@ -39,11 +39,11 @@
                 <span v-else>-</span>
               </td>
               <td>
-                <span v-if="res.request_trip.request">{{  res.request_trip.request.id }}</span>
+                <span v-if="res.request_trip">{{  res.request_trip.request.id }}</span>
                 <span v-else>-</span>
               </td>
               <td>
-                <span v-if="res.request_trip.trip">{{  res.request_trip.trip.id }}</span>
+                <span v-if="res.request_trip">{{  res.request_trip.trip.id }}</span>
                 <span v-else>-</span>
               </td>
               <td>

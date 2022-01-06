@@ -69,7 +69,7 @@
 
       </div>
 
-      <b-form-group label-cols="2" label="اسم الرحلة">
+      <b-form-group label-cols="2" label="صورة قسم الرحلة">
         <input type="file" @change="onFileChange($event)" required>
       </b-form-group>
 

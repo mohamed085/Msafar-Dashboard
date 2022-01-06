@@ -23,36 +23,49 @@
             <th scope="col">مقدم الشكوى</th>
             <th scope="col">السبب</th>
             <th scope="col">الحالة</th>
+            <th scope="col">الوصول لحل</th>
             <th scope="col">القرار</th>
             <th scope="col">تاريخ الاضافة</th>
+            <th scope="col"></th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="res in data.data" :key="res.id">
             <td>
-              <router-link :to="'/user/' + res.user.id">{{ res.user.name }}</router-link>
+              <router-link v-if="res.user" :to="'/user/' + res.user.id">{{ res.user.name }}</router-link>
             </td>
             <td>
-              <router-link :to="'/traveller/' + res.masafr.id">{{ res.masafr.name }}</router-link>
+              <router-link v-if="res.masafr" :to="'/traveller/' + res.masafr.id">{{ res.masafr.name }}</router-link>
             </td>
             <td>{{ res.related_trip }}</td>
             <td>{{ res.related_chat }}</td>
             <td>
-              <span v-if="res.status = 0"><b-badge variant="danger">لا</b-badge></span>
-              <span v-if="res.status = 1"><b-badge variant="success">نعم</b-badge></span>
+              <span v-if="res.status == 0"><b-badge variant="danger">لا</b-badge></span>
+              <span v-if="res.status == 1"><b-badge variant="success">نعم</b-badge></span>
             </td>
             <td>{{ res.id }}</td>
-            <td>{{ res.id }}</td>
+            <td>
+              <span v-if="res.complainant == 0">العميل</span>
+              <span v-if="res.complainant == 1">المسافر</span>
+            </td>
             <td>{{ res.reason }}</td>
             <td>
-              <span v-if="res.status = 0"><b-badge variant="danger">لا</b-badge></span>
-              <span v-if="res.status = 1"><b-badge variant="success">نعم</b-badge></span>
+              <span v-if="res.status == 0"><b-badge variant="danger">مغلق</b-badge></span>
+              <span v-if="res.status == 1"><b-badge variant="success">مفتوح</b-badge></span>
             </td>
             <td>
-              <span v-if="res.solved = 0"><b-badge variant="danger">لا</b-badge></span>
-              <span v-if="res.solved = 1"><b-badge variant="success">نعم</b-badge></span>
+              <span v-if="res.solved == 0"><b-badge variant="danger">لا</b-badge></span>
+              <span v-if="res.solved == 1"><b-badge variant="success">نعم</b-badge></span>
+            </td>
+
+            <td>
+              <span v-if="res.solved == 0"><b-badge variant="danger">لا</b-badge></span>
+              <span v-if="res.solved == 1"><b-badge variant="success">نعم</b-badge></span>
             </td>
             <td>{{ res.created_at }}</td>
+            <td>
+              <router-link :to="'/complain/' + res.id"><i class="far fa-eye"></i></router-link>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -105,8 +118,6 @@ export default {
 
       this.data = responseData.data;
 
-      console.log(this.data)
-
       this.spinner = false
 
 
@@ -121,17 +132,17 @@ h1, h2 {
   font-family: 'Almarai', sans-serif;
 }
 
-a {
+a, .a {
   color: #111111;
   text-decoration: none;
   padding: 2px 5px;
+  cursor: pointer;
 }
 
-a:hover {
-  color: #ffffff;
-  background-color: #198754;
-  border-radius: 5px;
+a:hover, .a:hover {
+  color: #198754 !important;
+  border-bottom: 1px solid #198754;
   padding: 2px 5px;
-
 }
+
 </style>

@@ -4,6 +4,80 @@
       <ul class="nav flex-column">
 
         <li class="nav-item">
+          <router-link to="/" exact class="nav-link" aria-current="page">
+            <i class="far fa-file"></i>الصفحة الرئيسية
+          </router-link>
+        </li>
+
+        <li class="nav-item">
+          <div @click="displayItems('customer')" :class="displayCustomerSubItem" class="nav-link d-flex justify-content-between" aria-current="page">
+            <router-link to="" class="sub-nav-link">
+              <i class="fas fa-users"></i>العملاء
+            </router-link>
+            <div>
+              <i v-if="displayCustomerSubItem" class="fas fa-chevron-up"></i>
+              <i v-if="!displayCustomerSubItem" class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+          <div v-if="displayCustomerSubItem" class="ms-3">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <router-link to="/customers" exact class="nav-link" aria-current="page">
+                  <i class="fas fa-users"></i>كل العملاء
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/foreign-customers" exact class="nav-link" aria-current="page">
+                  <i class="fas fa-users"></i>العملاء الاجانب
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/trusted-customers" exact class="nav-link" aria-current="page">
+                  <i class="fas fa-users"></i>العملاء الموثقون
+                </router-link>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <div @click="displayItems('traveller')" :class="displayTravellerSubItem" class="nav-link d-flex justify-content-between" aria-current="page">
+            <router-link to="" class="sub-nav-link">
+              <i class="fas fa-users"></i>المسافرون
+            </router-link>
+            <div>
+              <i v-if="displayTravellerSubItem" class="fas fa-chevron-up"></i>
+              <i v-if="!displayTravellerSubItem" class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+          <div v-if="displayTravellerSubItem" class="ms-3">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <router-link to="/traveller" exact class="nav-link" aria-current="page">
+                  <i class="fas fa-users"></i>كل المسافرين
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/foreign-traveller" exact class="nav-link" aria-current="page">
+                  <i class="fas fa-users"></i>المسافرون الاجانب
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/trusted-traveller" exact class="nav-link" aria-current="page">
+                  <i class="fas fa-users"></i>المسافرون الموثقون
+                </router-link>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <router-link to="/customers-documentation" class="nav-link" aria-current="page">
+            <i class="far fa-file"></i>قبول توثيق وتعديل الهوية
+          </router-link>
+        </li>
+
+        <li class="nav-item">
           <router-link to="/financial-transactions" exact class="nav-link" aria-current="page">
             <i class="far fa-file"></i>المعاملات المالية والخزانة
           </router-link>
@@ -53,19 +127,31 @@
                   <i class="far fa-file"></i>كل الطلبات
                 </router-link>
               </li>
-              <li class="nav-item">
-                <router-link to="/add-new-order-section" exact class="nav-link" aria-current="page">
-                  <i class="fas fa-plus"></i>اضافة اقسام طلبات
-                </router-link>
-              </li>
+<!--              <li class="nav-item">-->
+<!--                <router-link to="/add-new-order-section" exact class="nav-link" aria-current="page">-->
+<!--                  <i class="fas fa-plus"></i>اضافة اقسام طلبات-->
+<!--                </router-link>-->
+<!--              </li>-->
             </ul>
           </div>
 
         </li>
 
         <li class="nav-item">
-          <router-link to="/send-email" exact class="nav-link" aria-current="page">
-            <i class="fas fa-envelope-square"></i>إرسال ايميل و اشعار ونوافذ و SMS
+          <router-link to="/send-email-users" exact class="nav-link" aria-current="page">
+            <i class="fas fa-envelope-square"></i>إرسال ايميل او اشعار للعملاء
+          </router-link>
+        </li>
+
+        <li class="nav-item">
+          <router-link to="/send-email-travellers" exact class="nav-link" aria-current="page">
+            <i class="fas fa-envelope-square"></i>إرسال ايميل او اشعار للمسافرين
+          </router-link>
+        </li>
+
+        <li class="nav-item">
+          <router-link to="/windows" exact class="nav-link" aria-current="page">
+            <i class="fas fa-plus"></i>النوافذ
           </router-link>
         </li>
 
@@ -95,36 +181,6 @@
           </div>
         </li>
 
-        <li class="nav-item">
-          <div @click="displayItems('customer')" :class="displayCustomerSubItem" class="nav-link d-flex justify-content-between" aria-current="page">
-            <router-link to="" class="sub-nav-link">
-              <i class="fas fa-users"></i>العملاء
-            </router-link>
-            <div>
-              <i v-if="displayCustomerSubItem" class="fas fa-chevron-up"></i>
-              <i v-if="!displayCustomerSubItem" class="fas fa-chevron-down"></i>
-            </div>
-          </div>
-          <div v-if="displayCustomerSubItem" class="ms-3">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <router-link to="/customers" exact class="nav-link" aria-current="page">
-                  <i class="fas fa-users"></i>كل العملاء
-                </router-link>
-              </li>
-<!--              <li class="nav-item">-->
-<!--                <router-link to="/add-new-customer" exact class="nav-link" aria-current="page">-->
-<!--                  <i class="fas fa-plus"></i>اضافة عميل جديد-->
-<!--                </router-link>-->
-<!--              </li>-->
-              <li class="nav-item">
-                <router-link to="/customers-documentation" exact class="nav-link" aria-current="page">
-                  <i class="fas fa-user"></i>توثيق العملاء
-                </router-link>
-              </li>
-            </ul>
-          </div>
-        </li>
 
         <li class="nav-item">
           <div @click="displayItems('invoice')" :class="displayInvoiceSubItem" class="nav-link d-flex justify-content-between" aria-current="page">
@@ -207,34 +263,23 @@
           </router-link>
         </li>
 
-
-        <li class="nav-item">
-          <router-link to="/customers-documentation" class="nav-link" aria-current="page">
-            <i class="far fa-file"></i>توثيق الهويه
-          </router-link>
-        </li>
-
-
-        <li class="nav-item">
-          <div @click="displayItems('archive')" :class="displayArchivesSubItem" class="nav-link d-flex justify-content-between" aria-current="page">
-            <router-link to="" class="sub-nav-link">
-              <i class="fas fa-users"></i>الارشيف
-            </router-link>
-            <div>
-              <i v-if="displayArchivesSubItem" class="fas fa-chevron-up"></i>
-              <i v-if="!displayArchivesSubItem" class="fas fa-chevron-down"></i>
-            </div>
-          </div>
-          <div v-if="displayArchivesSubItem" class="ms-3">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <router-link to="/windows" exact class="nav-link" aria-current="page">
-                  <i class="fas fa-plus"></i>النوافذ
-                </router-link>
-              </li>
-            </ul>
-          </div>
-        </li>
+<!--        <li class="nav-item">-->
+<!--          <div @click="displayItems('archive')" :class="displayArchivesSubItem" class="nav-link d-flex justify-content-between" aria-current="page">-->
+<!--            <router-link to="" class="sub-nav-link">-->
+<!--              <i class="fas fa-users"></i>الارشيف-->
+<!--            </router-link>-->
+<!--            <div>-->
+<!--              <i v-if="displayArchivesSubItem" class="fas fa-chevron-up"></i>-->
+<!--              <i v-if="!displayArchivesSubItem" class="fas fa-chevron-down"></i>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div v-if="displayArchivesSubItem" class="ms-3">-->
+<!--            <ul class="nav flex-column">-->
+<!--              <li class="nav-item">-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </div>-->
+<!--        </li>-->
 
       </ul>
 
@@ -254,12 +299,15 @@ export default {
       displayInvoiceSubItem: false,
       displayArchivesSubItem: false,
       displayAdvertisingSubItem: false,
+      displayTravellerSubItem: false,
     }
   },
   methods: {
     displayItems(item) {
       if (item === 'customer')
         this.displayCustomerSubItem = !this.displayCustomerSubItem
+      else if (item === 'traveller')
+        this.displayTravellerSubItem = !this.displayTravellerSubItem
       else if (item === 'order')
         this.displayOrdersSubItem = !this.displayOrdersSubItem
       else if (item === 'tripe')

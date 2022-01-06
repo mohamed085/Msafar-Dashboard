@@ -6,6 +6,8 @@
       <b-spinner variant="success" style="width: 3rem; height: 3rem;" type="grow" label="Spinning"></b-spinner>
     </div>
 
+    <b-modal id="my-modal">{{ msg }}</b-modal>
+
     <main v-if="!spinner">
       <div class="pe-3 ps-3 pt-4 pb-5">
         <div class="pb-2 row border-bottom">
@@ -23,7 +25,7 @@
 
           <div class="col-3 d-flex flex-column  justify-content-center">
             <h3><b-badge variant="success">الاسم: {{ data.name }}</b-badge></h3>
-            <span>مسافر</span>
+            <span>عميل</span>
             <span v-if="data.trust == 0">غير موثق</span>
             <span v-else-if="data.trust == 1">موثق</span>
             <span>رقم الهاتف: {{ data.phone }}</span>
@@ -77,18 +79,32 @@
         </div>
 
         <div class="pt-4 pb-4 d-flex flex-column justify-content-center border-bottom">
-          <div class="btns d-flex justify-content-center">
-            <button type="button" class="btn btn-outline-success">إرسال SMS</button>
-            <button type="button" class="btn btn-outline-success">إرسال بريد</button>
-            <button type="button" class="btn btn-outline-success">إرسال إشعار</button>
-            <button type="button" class="btn btn-outline-success">إرسال نوافذ</button>
-          </div>
+          <b-form @submit.prevent="sendMessage">
+            <div class="btns d-flex justify-content-center">
+              <b-form-group v-slot="{ ariaDescribedby }">
+                <div class="d-flex">
+                  <div class="d-flex">
+                    <b-form-radio v-model="type" :aria-describedby="ariaDescribedby" name="some-radios" value="0"></b-form-radio><span class="ms-2">إرسال إشعار</span>
+                  </div>
+                  <div class="d-flex">
+                    <b-form-radio v-model="type" :aria-describedby="ariaDescribedby" name="some-radios" value="3"></b-form-radio><span class="ms-2">إرسال SMS</span>
+                  </div>
+                  <div class="d-flex">
+                    <b-form-radio v-model="type" :aria-describedby="ariaDescribedby" name="some-radios" value="2"></b-form-radio><span class="ms-2">إرسال بريد</span>
+                  </div>
+                  <div class="d-flex">
+                    <b-form-radio v-model="type" :aria-describedby="ariaDescribedby" name="some-radios" value="1"></b-form-radio><span class="ms-2">إرسال نوافذ</span>
+                  </div>
+                </div>
+              </b-form-group>
+            </div>
 
-          <div class="d-flex mt-3">
-            <b-form-input class="me-3" type="text" placeholder="المشرف يضع الملاحظاته هنا"></b-form-input>
-            <b-button class="pe-3 ps-3" variant="success">حفظ</b-button>
-          </div>
-
+            <div class="d-flex mt-3">
+              <b-form-input class="me-3" type="text" v-model="subject" placeholder="المشرف يضع الملاحظاته هنا" required></b-form-input>
+              <b-button type="submit" class="pe-3 ps-3" variant="success">حفظ</b-button>
+            </div>
+            <span class="me-2 ms-2 text-secondary">في حال لم يتم اختيار طريقة الارسال سوف يتم ارسال الملاحظات عن طريق الاشعارات</span>
+          </b-form>
         </div>
 
 
@@ -103,8 +119,6 @@
             <table class="table table-hover" v-if="!responseErr">
               <thead>
               <tr class="bg-success text-white">
-                <th scope="col">#</th>
-                <th scope="col">صورة العميل</th>
                 <th scope="col">العميل</th>
                 <th scope="col">الوصف</th>
                 <th scope="col">رقم الطلب</th>
@@ -114,8 +128,8 @@
                 <th scope="col">حالة الطلب</th>
                 <th scope="col">مطلوب تامين</th>
                 <th scope="col">تخفيض</th>
-                <th scope="col">اموال معلقة</th>
                 <th scope="col">نهاية الرحلة</th>
+                <th scope="col">اموال معلقة</th>
                 <th scope="col">الاستجابة علي الطلب</th>
                 <th scope="col">المسافر المنفذ</th>
                 <th scope="col"></th>
@@ -123,13 +137,8 @@
               </thead>
               <tbody>
               <tr v-for="res in response" :key="res.id">
-                <td></td>
                 <td>
-                  <b-avatar size="4rem" :src="res.photo" v-if="res.photo"/>
-                  <span v-else>-</span>
-                </td>
-                <td>
-                  <span v-if="res.user">{{ res.user.name }}</span>
+                  <router-link :to="'/user/' + res.user.id " v-if="res.user">{{ res.user.name }}</router-link>
                   <span v-else>-</span>
                 </td>
                 <td>
@@ -142,6 +151,9 @@
                 </td>
                 <td>
                   <span v-if="res.created_at">{{ res.created_at }}</span>
+                </td>
+                <td>
+                  <span v-if="res.from_place">{{ res.from_place }}</span>
                   <span v-else>-</span>
                 </td>
                 <td>
@@ -149,11 +161,22 @@
                   <span v-else>-</span>
                 </td>
                 <td>
-                  <span v-if="res.request_trip">{{ res.request_trip.offer_status }}</span>
+                <span v-if="res.request_trip">
+                  <span v-for="request_trip in res.request_trip" :key="request_trip.id" class="d-flex flex-column">
+                    <b-badge variant="danger" v-if="request_trip.offer_status === '-1'">ملغي</b-badge>
+                    <b-badge variant="warning" v-else-if="request_trip.offer_status === '0'">غير مربوط</b-badge>
+                    <b-badge variant="success" v-else-if="request_trip.offer_status === '1'">فعال</b-badge>
+                    <b-badge variant="primary" v-else-if="request_trip.offer_status === '2'">معلق</b-badge>
+                    <b-badge variant="secondary" v-else-if="request_trip.offer_status === '3'">جاري التاكيد</b-badge>
+                    <b-badge variant="info" v-else-if="request_trip.offer_status === '4'">جاري التنفيذ</b-badge>
+                    <b-badge variant="info" class="text-black" v-else-if="request_trip.offer_status === '5'">منفذ</b-badge>
+                  </span>
+                </span>
                   <span v-else>-</span>
                 </td>
                 <td>
-                  <span v-if="res.have_insurance">{{ res.have_insurance }}</span>
+                  <b-badge variant="danger" v-if="res.have_insurance = '0'">لا يوجد تامين</b-badge>
+                  <b-badge variant="success" v-else-if="res.have_insurance = '1'">يوجد تامين</b-badge>
                   <span v-else>-</span>
                 </td>
                 <td>
@@ -168,7 +191,10 @@
                   <span v-if="res.max_day">{{ res.max_day }}</span>
                   <span v-else>-</span>
                 </td>
+                <td>{{ res.user.admin.name }}</td>
+                <td>-</td>
               </tr>
+
               </tbody>
             </table>
             <div v-else>{{ responseErr }}</div>
@@ -268,7 +294,6 @@
 
 
       </div>
-
     </main>
   </div>
 </template>
@@ -292,6 +317,9 @@ export default {
       responseErr: '',
       responseErr2: '',
       rate: 3.35,
+      type: 0,
+      subject: '',
+      msg: ''
     }
   },
   created() {
@@ -414,7 +442,49 @@ export default {
 
       this.spinner1 = false
     },
+    async sendMessage() {
+      this.spinner = true
 
+      let myHeaders = new Headers();
+
+      const token = this.$store.getters.token;
+
+      myHeaders.append("authToken", token)
+      myHeaders.append("Content-Type", "application/json");
+
+
+      let raw = JSON.stringify({
+        "type": 0,
+        "subject": this.subject,
+        "send_by": this.type,
+        "type_of_template": 0,
+        "users": [this.$route.params.id]
+      });
+
+      let requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      const response = await fetch("https://msafr.we-work.pro/api/auth/admin/send-notifications-or-emails", requestOptions);
+
+      const responseData = await response.json();
+
+      if (responseData.status) {
+        this.status = true
+        this.msg = 'تم الإرسال بنجاح'
+      } else {
+        this.status = false
+        this.msg = 'لم يتم الإرسال'
+      }
+
+      this.$bvModal.show("my-modal")
+
+      this.spinner = false
+
+    },
   }
 }
 </script>

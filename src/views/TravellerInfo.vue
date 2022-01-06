@@ -6,7 +6,8 @@
       <b-spinner variant="success" style="width: 3rem; height: 3rem;" type="grow" label="Spinning"></b-spinner>
     </div>
 
-    
+    <b-modal id="my-modal">{{ msg }}</b-modal>
+
     <main v-if="!spinner">
       <div class="pe-3 ps-3 pt-4 pb-5">
         <div class="pb-2 row border-bottom">
@@ -94,18 +95,32 @@
         </div>
 
         <div class="pt-4 pb-4 d-flex flex-column justify-content-center border-bottom">
-          <div class="btns d-flex justify-content-center">
-            <button type="button" class="btn btn-outline-success">إرسال SMS</button>
-            <button type="button" class="btn btn-outline-success">إرسال بريد</button>
-            <button type="button" class="btn btn-outline-success">إرسال إشعار</button>
-            <button type="button" class="btn btn-outline-success">إرسال نوافذ</button>
-          </div>
+          <b-form @submit.prevent="sendMessage">
+            <div class="btns d-flex justify-content-center">
+              <b-form-group v-slot="{ ariaDescribedby }">
+                <div class="d-flex">
+                  <div class="d-flex">
+                    <b-form-radio v-model="type" :aria-describedby="ariaDescribedby" name="some-radios" value="0"></b-form-radio><span class="ms-2">إرسال إشعار</span>
+                  </div>
+                  <div class="d-flex">
+                    <b-form-radio v-model="type" :aria-describedby="ariaDescribedby" name="some-radios" value="3"></b-form-radio><span class="ms-2">إرسال SMS</span>
+                  </div>
+                  <div class="d-flex">
+                    <b-form-radio v-model="type" :aria-describedby="ariaDescribedby" name="some-radios" value="2"></b-form-radio><span class="ms-2">إرسال بريد</span>
+                  </div>
+                  <div class="d-flex">
+                    <b-form-radio v-model="type" :aria-describedby="ariaDescribedby" name="some-radios" value="1"></b-form-radio><span class="ms-2">إرسال نوافذ</span>
+                  </div>
+                </div>
+              </b-form-group>
+            </div>
 
-          <div class="d-flex mt-3">
-            <b-form-input class="me-3" type="text" placeholder="المشرف يضع الملاحظاته هنا"></b-form-input>
-            <b-button class="pe-3 ps-3" variant="success">حفظ</b-button>
-          </div>
-
+            <div class="d-flex mt-3">
+              <b-form-input class="me-3" type="text" v-model="subject" placeholder="المشرف يضع الملاحظاته هنا" required></b-form-input>
+              <b-button type="submit" class="pe-3 ps-3" variant="success">حفظ</b-button>
+            </div>
+            <span class="me-2 ms-2 text-secondary">في حال لم يتم اختيار طريقة الارسال سوف يتم ارسال الملاحظات عن طريق الاشعارات</span>
+          </b-form>
         </div>
 
 
@@ -214,6 +229,9 @@ name: "TravellerInfo",
       response: '',
       responseErr: '',
       rate: 3.35,
+      type: 0,
+      subject: '',
+      msg: ''
     }
   },
   created() {
@@ -294,11 +312,51 @@ name: "TravellerInfo",
         this.responseErr = "لاتوجد رحلات"
       }
 
-      console.log(this.response)
-
       this.spinner1 = false
     },
+    async sendMessage() {
+      this.spinner = true
 
+      let myHeaders = new Headers();
+
+      const token = this.$store.getters.token;
+
+      myHeaders.append("authToken", token)
+      myHeaders.append("Content-Type", "application/json");
+
+
+      let raw = JSON.stringify({
+        "type": 1,
+        "subject": this.subject,
+        "send_by": this.type,
+        "type_of_template": 0,
+        "users": [this.$route.params.id]
+      });
+
+      let requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      const response = await fetch("https://msafr.we-work.pro/api/auth/admin/send-notifications-or-emails", requestOptions);
+
+      const responseData = await response.json();
+
+      if (responseData.status) {
+        this.status = true
+        this.msg = 'تم الإرسال بنجاح'
+      } else {
+        this.status = false
+        this.msg = 'لم يتم الإرسال'
+      }
+
+      this.$bvModal.show("my-modal")
+
+      this.spinner = false
+
+    },
   }
 }
 </script>

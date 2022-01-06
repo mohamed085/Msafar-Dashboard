@@ -51,15 +51,13 @@
           <tbody>
             <tr v-for="res in responseData" :key="res.id">
               <td>
-                <span v-if="res.request">
-                  <router-link :to="'/user/' + res.request.user.id">{{ res.request.user.name }}</router-link>
-                </span>
+                  <router-link v-if="res.user" :to="'/user/' + res.user.id">{{ res.user.name }}</router-link>
               </td>
               <td>
-                <span v-if="res.request">{{ res.request.id }}</span>
+               {{ res.id }}
               </td>
              <td>
-                <span v-if="res.request">{{ res.request.created_at }}</span>
+                <span v-if="res">{{ res.created_at }}</span>
              </td>
              <td>
                <b-badge variant="danger" v-if="res.offer_status == '-1'">ملغي</b-badge>
@@ -79,16 +77,16 @@
                 <span v-if="res.trip">{{ res.trip.id }}</span>
              </td>
              <td>
-                <span v-if="res.message.created_at">{{ res.message.created_at }}</span>
+                <span v-if="res.message">{{ res.message.created_at }}</span>
              </td>
              <td>
-                <span v-if="res.message.message_not_seen_count">{{ res.message.message_not_seen_count }}</span>
+                <span v-if="res.message">{{ res.message.message_not_seen_count }}</span>
              </td>
              <td>
-                <span v-if="res.message.pronunciation_statements_count">{{ res.message.pronunciation_statements_count }}</span>
+                <span v-if="res.message">{{ res.message.pronunciation_statements_count }}</span>
              </td>
              <td>
-                <span v-if="res.message.attached_chat_count">{{ res.message.attached_chat_count }}</span>
+                <span v-if="res.message">{{ res.message.attached_chat_count }}</span>
              </td>
             </tr>
           </tbody>
@@ -132,14 +130,7 @@ export default {
       myHeaders.append("authToken", token)
 
       let raw = JSON.stringify({
-        "page": 0,
-        "filter": 0,
-        "request_id": 1,
-        "trip_id":3,
-        "phone": "012345678935667",
-        "from_date": "2021-10-03",
-        "to_date": "2021-10-10",
-        "paginateCount": 10
+        "paginateCount": 100
       });
 
       let requestOptions = {
@@ -152,14 +143,8 @@ export default {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
 
-      if (!response.ok) {
-        const error = new Error(responseData.message || 'Failed to fetch!');
-        throw error;
-      }
 
-      this.responseData = responseData.data.data
-
-      console.log(this.responseData)
+      this.responseData = responseData.data
 
       this.spinner = false;
 

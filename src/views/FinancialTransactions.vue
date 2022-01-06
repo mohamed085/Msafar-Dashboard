@@ -10,23 +10,22 @@
 
     <div v-else>
       <div class="search-inputs mb-3 mt-2 d-flex flex-wrap">
-        <b-form class="search-form d-flex" @submit.prevent="search('name')">
+        <b-form class="search-form d-flex" @submit.prevent="searchByPhone">
           <b-form-input v-model="phoneKey" required placeholder="بحث برقم الهاتف"></b-form-input>
           <b-button type="submit" class="me-1 ms-1" variant="light"><i class="fas fa-search"></i></b-button>
         </b-form>
 
-        <b-form class="search-form d-flex" @submit.prevent="search('id')">
-          <b-form-input v-model="idKey" required placeholder="بحث برقم الهويه"></b-form-input>
-          <b-button type="submit" class="me-1 ms-1" variant="light"><i class="fas fa-search"></i></b-button>
-        </b-form>
-
-        <b-form class="search-form d-flex" @submit.prevent="search('date')">
+        <b-form class="search-form d-flex" @submit.prevent="searchByDate">
           <b-form-input type="date" v-model="dateKey1" required placeholder="بحث الجميع من تاريخ"></b-form-input>
           <b-form-input type="date" v-model="dateKey2" required placeholder="إالي تاريخ"></b-form-input>
           <b-button type="submit" class="me-1 ms-1" variant="light"><i class="fas fa-search"></i></b-button>
         </b-form>
-      </div>
 
+        <b-form class="search-form d-flex" @submit.prevent="remove">
+          <b-button type="submit" class="me-1 ms-1" variant="light"><i class="fas fa-times"></i></b-button>
+        </b-form>
+
+      </div>
 
       <div class="table-responsive" v-if="response">
         <table class="table table-hover">
@@ -51,11 +50,11 @@
           <tr v-for="res in response.data" :key="res.id">
             <td v-if="res.id">{{ res.id }}</td>
             <td>
-              <span v-if="res.request_trip.request">{{ res.request_trip.request.user.name }}</span>
+              <router-link :to="'/user/' + res.request_trip.request.user.id" v-if="res.request_trip">{{ res.request_trip.request.user.name }}</router-link>
               <span v-else></span>
             </td>
             <td>
-              <span v-if="res.request_trip.request">{{ res.request_trip.request.created_at }}</span>
+              <span v-if="res.request_trip">{{ res.request_trip.request.created_at }}</span>
               <span v-else></span>
             </td>
             <td>
@@ -63,9 +62,7 @@
               <span v-else></span>
             </td>
             <td>
-              <router-link :to="'/traveller/' + res.request_trip.trip.masafr.id">
-                <span v-if="res.request_trip.trip">{{ res.request_trip.trip.masafr.name }}</span>
-              </router-link>
+                <router-link :to="'/traveller/' + res.request_trip.trip.masafr.id" v-if="res.request_trip">{{ res.request_trip.trip.masafr.name }}</router-link>
             </td>
             <td>
               <span v-for="fatoorah in res.fatoorah" :key="fatoorah.id">
@@ -79,36 +76,39 @@
               </span>
             </td>
             <td>
-              <span v-if="res.request_trip.payment_method === '0'"><b-badge variant="danger">اونلاين</b-badge> </span>
-              <span v-else-if="res.request_trip.payment_method === '1'"><b-badge variant="info">كاش</b-badge></span>
+              <span v-if="res.request_trip === '0'"><b-badge variant="danger">اونلاين</b-badge> </span>
+              <span v-else-if="res.request_trip === '1'"><b-badge variant="info">كاش</b-badge></span>
               <span v-else>-</span>
             </td>
             <td>
-              <span v-if="res.request_trip.website_service">{{ res.request_trip.website_service }}</span>
+              <span v-if="res.request_trip">{{ res.request_trip.website_service }}</span>
             </td>
             <td>
-              <span v-if="res.request_trip.discounts">{{ res.request_trip.discounts }}</span>
+              <span v-if="res.request_trip">{{ res.request_trip.discounts }}</span>
             </td>
             <td>
-              <span v-if="res.request_trip.insurance_hold">{{ res.request_trip.insurance_hold }}</span>
+              <span v-if="res.request_trip">{{ res.request_trip.insurance_hold }}</span>
             </td>
             <td>
-              <span v-if="res.request_trip.insurance_hold">{{ res.request_trip.insurance_hold }}</span>
+              <span v-if="res.request_trip">{{ res.request_trip.insurance_hold }}</span>
             </td>
             <td>
-              <b-badge variant="danger" v-if="res.request_trip.offer_status === '-1'">ملغي</b-badge>
-              <b-badge variant="warning" v-else-if="res.request_trip.offer_status === '0'">غير مربوط</b-badge>
-              <b-badge variant="success" v-else-if="res.request_trip.offer_status === '1'">فعال</b-badge>
-              <b-badge variant="primary" v-else-if="res.request_trip.offer_status === '2'">معلق</b-badge>
-              <b-badge variant="secondary" v-else-if="res.request_trip.offer_status === '3'">جاري التاكيد</b-badge>
-              <b-badge variant="info" v-else-if="res.request_trip.offer_status === '4'">جاري التنفيذ</b-badge>
-              <b-badge variant="light" class="text-black" v-else-if="res.request_trip.offer_status === '5'">منفذ</b-badge>
-
+              <div v-if="res.request_trip">
+                <b-badge variant="danger" v-if="res.request_trip.offer_status === '-1'">ملغي</b-badge>
+                <b-badge variant="warning" v-else-if="res.request_trip.offer_status === '0'">غير مربوط</b-badge>
+                <b-badge variant="success" v-else-if="res.request_trip.offer_status === '1'">فعال</b-badge>
+                <b-badge variant="primary" v-else-if="res.request_trip.offer_status === '2'">معلق</b-badge>
+                <b-badge variant="secondary" v-else-if="res.request_trip.offer_status === '3'">جاري التاكيد</b-badge>
+                <b-badge variant="info" v-else-if="res.request_trip.offer_status === '4'">جاري التنفيذ</b-badge>
+                <b-badge variant="light" class="text-black" v-else-if="res.request_trip.offer_status === '5'">منفذ</b-badge>
+              </div>
             </td>
           </tr>
           </tbody>
         </table>
       </div>
+
+      <div v-else-if="msg">{{ msg }}</div>
 
       <div v-else>لم يتم الغثور علي بيانات</div>
 
@@ -130,7 +130,8 @@ export default {
       idKey: '',
       dateKey1: null,
       dateKey2: null,
-      spinner: false
+      spinner: false,
+      msg: ''
     }
   },
   created() {
@@ -162,52 +163,92 @@ export default {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
 
-      if (!response.ok) {
-        const error = new Error(responseData.message || 'Failed to fetch!');
-        throw error;
+
+      if (responseData.data.length > 0) {
+        this.response = responseData
+        this.response.data.forEach(data => {
+          let fatoorahValue = 0
+          data.fatoorah.forEach(fatoorah => {
+            fatoorahValue += parseInt(fatoorah.value)
+          })
+          data.fatoorah.push({
+            fatoorahValue: fatoorahValue,
+            type: 'fatoorahValue'
+          })
+        })
+      } else {
+        this.msg = "لاتوجد بيانات"
       }
-
-      this.response = responseData
-
-      this.response.data.forEach(data => {
-        let fatoorahValue = 0
-        data.fatoorah.forEach(fatoorah => {
-          fatoorahValue += parseInt(fatoorah.value)
-        })
-        data.fatoorah.push({
-          fatoorahValue: fatoorahValue,
-          type: 'fatoorahValue'
-        })
-      })
 
       this.spinner = false;
 
     },
 
-    async search(key) {
+    async searchByPhone() {
+
+      this.response = ''
 
       this.spinner = true
+
+      const url = 'https://msafr.we-work.pro/api/auth/admin/get-transactions-for-fiscal-year';
 
       let myHeaders = new Headers();
       const token = this.$store.getters.token;
 
-      myHeaders.append("authToken", token);
+      myHeaders.append("authToken", token)
       myHeaders.append("Content-Type", "application/json");
 
-      let filterKey = 0;
+      let raw = JSON.stringify({
+        "filter": 1,
+        "phone": this.phoneKey,
+      });
 
-      if (key === 'name') {
-        filterKey = 1
-      } else if (key === 'id') {
-        filterKey = 2
-      } else if (key === 'date') {
-        filterKey = 3
+      let requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      const response = await fetch(url, requestOptions);
+      const responseData = await response.json();
+
+      if (responseData.data.length > 0) {
+        this.response = responseData
+        this.response.data.forEach(data => {
+          let fatoorahValue = 0
+          data.fatoorah.forEach(fatoorah => {
+            fatoorahValue += parseInt(fatoorah.value)
+          })
+          data.fatoorah.push({
+            fatoorahValue: fatoorahValue,
+            type: 'fatoorahValue'
+          })
+        })
+      } else {
+        this.msg = "لاتوجد بيانات"
       }
 
+
+      this.spinner = false;
+    },
+
+    async searchByDate() {
+
+      this.response = ''
+
+      this.spinner = true
+
+      const url = 'https://msafr.we-work.pro/api/auth/admin/get-transactions-for-fiscal-year';
+
+      let myHeaders = new Headers();
+      const token = this.$store.getters.token;
+
+      myHeaders.append("authToken", token)
+      myHeaders.append("Content-Type", "application/json");
+
       let raw = JSON.stringify({
-        "filter": filterKey,
-        "request_id": this.idKey,
-        "phone": this.phoneKey,
+        "filter": 3,
         "from_date": this.dateKey1,
         "to_date": this.dateKey2,
       });
@@ -219,17 +260,37 @@ export default {
         redirect: 'follow'
       };
 
-      fetch("https://msafr.we-work.pro/api/auth/admin/get-transactions-for-fiscal-year", requestOptions)
-          .then(response => response.json())
-          .then(result => {
-            console.log(result)
-            this.response = result
+      const response = await fetch(url, requestOptions);
+      const responseData = await response.json();
+
+      if (responseData.data.length > 0) {
+        this.response = responseData
+        this.response.data.forEach(data => {
+          let fatoorahValue = 0
+          data.fatoorah.forEach(fatoorah => {
+            fatoorahValue += parseInt(fatoorah.value)
           })
-          .catch(error => console.log('error', error));
+          data.fatoorah.push({
+            fatoorahValue: fatoorahValue,
+            type: 'fatoorahValue'
+          })
+        })
+      } else {
+        this.msg = "لاتوجد بيانات"
+      }
 
-      this.spinner = false
+      this.spinner = false;
+    },
 
+    remove() {
+      this.dateKey1 = ''
+      this.dateKey2 = ''
+      this.phoneKey = ''
+      this.idKey = ''
+
+      this.loadData()
     }
+
   }
 
 }

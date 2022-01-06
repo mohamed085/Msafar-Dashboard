@@ -4,34 +4,39 @@
       <h1>اقسام الطلبات</h1>
     </div>
 
+    <b-modal id="my-modal" hide-footer>
+      <div class="d-block text-center">
+        <h3>{{ msg }}</h3>
+      </div>
+    </b-modal>
+
     <div v-if="spinner" class="d-flex justify-content-center align-items-center pt-4 pb-4">
       <b-spinner variant="success" style="width: 3rem; height: 3rem;" type="grow" label="Spinning"></b-spinner>
     </div>
 
     <div v-else>
       <div class="search-inputs mb-3 mt-2 d-flex flex-wrap">
-        <b-form class="search-form d-flex" @submit.prevent="search('name')">
-          <b-form-input v-model="idKey" required placeholder="بحث بالاسم"></b-form-input>
-          <b-button type="submit" class="me-1 ms-1" variant="light"><i class="fas fa-search"></i></b-button>
-        </b-form>
-
-        <b-form class="search-form d-flex" @submit.prevent="search('phone')">
+        <b-form class="search-form d-flex" @submit.prevent="searchByPhone">
           <b-form-input v-model="phoneKey" required placeholder="بحث بالجوال"></b-form-input>
           <b-button type="submit" class="me-1 ms-1" variant="light"><i class="fas fa-search"></i></b-button>
         </b-form>
 
-        <b-form class="search-form d-flex" @submit.prevent="search('city')">
+        <b-form class="search-form d-flex" @submit.prevent="searchByPlace">
           <b-form-input v-model="fromCityKey" required placeholder="من مدينة"></b-form-input>
           <b-form-input v-model="toCityKey" required placeholder="الي مدينة"></b-form-input>
           <b-button type="submit" class="me-1 ms-1" variant="light"><i class="fas fa-search"></i></b-button>
         </b-form>
+
+        <b-form class="search-form d-flex" @submit.prevent="remove">
+          <b-button type="submit" class="me-1 ms-1" variant="light"><i class="fas fa-times"></i></b-button>
+        </b-form>
+
       </div>
 
-      <div class="table-responsive">
+      <div v-if="response" class="table-responsive">
         <table class="table  table-hover">
           <thead>
           <tr class="bg-success text-white">
-            <th scope="col">#</th>
             <th scope="col">صورة العميل</th>
             <th scope="col">العميل</th>
             <th scope="col">الوصف</th>
@@ -51,13 +56,12 @@
           </thead>
           <tbody>
             <tr v-for="res in response.data" :key="res.id">
-              <td></td>
               <td>
                 <b-avatar :src="res.user.photo" v-if="res.user.photo"/>
                 <span v-else>-</span>
               </td>
               <td>
-                <span v-if="res.user">{{ res.user.name }}</span>
+                <router-link :to="'/user/' + res.user.id " v-if="res.user">{{ res.user.name }}</router-link>
                 <span v-else>-</span>
               </td>
               <td>
@@ -94,8 +98,8 @@
                 <span v-else>-</span>
               </td>
               <td>
-                <b-badge variant="danger" v-if="res.have_insurance = '0'">لا يوجد تامين</b-badge>
-                <b-badge variant="success" v-else-if="res.have_insurance = '1'">يوجد تامين</b-badge>
+                <b-badge variant="danger" v-if="res.have_insurance == '0'">لا يوجد تامين</b-badge>
+                <b-badge variant="success" v-else-if="res.have_insurance == '1'">يوجد تامين</b-badge>
                 <span v-else>-</span>
               </td>
               <td>
@@ -110,23 +114,25 @@
                 <span v-if="res.max_day">{{ res.max_day }}</span>
                 <span v-else>-</span>
               </td>
+              <td v-if="res.user">
+                <span v-if="res.user.admin">{{ res.user.admin.name }}</span>
+                <span v-else>-</span>
+              </td>
+              <td>-</td>
+              <td class="d-flex icons">
+                <span class="a" @click="deleteUser(res.id)"><i class="fas fa-trash"></i></span>
+              </td>
 
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div class="btn-group me-2">
-        <button type="button" class="btn btn-outline-success">حذف المحدد غير مرتبط بكود</button>
-        <button type="button" class="btn btn-outline-success">إرسال SMS</button>
-        <button type="button" class="btn btn-outline-success">إرسال بريد</button>
-        <button type="button" class="btn btn-outline-success">إرسال إشعار</button>
-        <button type="button" class="btn btn-outline-success">إرسال نوافذ</button>
-        <button type="button" class="btn btn-outline-success">حذف الطلبات المنتهية أكثر من شهر غير مرتبطة</button>
-      </div>
+      <div v-else-if="msg">{{ msg }}</div>
+
+      <div v-else>لم يتم الغثور علي بيانات</div>
 
     </div>
-
 
   </div>
 </template>
@@ -139,12 +145,13 @@ export default {
   name: "Orders",
   data() {
     return {
-      idKey: '',
       phoneKey: '',
       fromCityKey: '',
       toCityKey: '',
       spinner: false,
-      response: ''
+      response: '',
+      msg: '',
+      status: '',
     }
   },
   created() {
@@ -177,46 +184,26 @@ export default {
       const response = await fetch(url, requestOptions);
       const responseData = await response.json();
 
-
-      if (!response.ok) {
-        const error = new Error(responseData.message || 'Failed to fetch!');
-        throw error;
-      }
-
       this.response = responseData.data
 
       this.spinner = false;
 
     },
-    async search(key) {
-      this.spinner = true
+    async deleteUser(id) {
+      this.spinner = false
+      this.response = ''
 
-      let filterKey;
-
-      if (key === 'request_id') {
-        filterKey = 1
-      } else if (key === 'trip_id') {
-        filterKey = 2
-      } else if (key === 'phone') {
-        filterKey = 3
-      } else if (key === 'place') {
-        filterKey = 4
-      }
+      const url = 'https://msafr.we-work.pro/api/auth/admin/delete-request-service';
 
       let myHeaders = new Headers();
-
       const token = this.$store.getters.token;
 
       myHeaders.append("authToken", token)
       myHeaders.append("Content-Type", "application/json");
 
-      let raw = {
-        "filter": filterKey,
-        "trip_id": this.trip_id,
-        "phone": this.phone,
-        "from_place": this.from_place,
-        "to_place": this.to_place,
-      }
+      let raw = JSON.stringify({
+        "request_service_id": id
+      });
 
       let requestOptions = {
         method: 'POST',
@@ -225,22 +212,111 @@ export default {
         redirect: 'follow'
       };
 
-      const response = await fetch("https://msafr.we-work.pro/api/auth/admin/get-trips", requestOptions);
+      const response = await fetch(url, requestOptions);
 
       const responseData = await response.json();
 
-      if (!response.ok) {
-        const error = new Error(responseData.message || 'Failed to fetch!');
-        throw error;
+      if (responseData.status) {
+        this.status = true
+        this.msg = 'تم الحذف بنجاح'
+      } else {
+        this.status = false
+        this.msg = 'لم يتم الحذف'
       }
 
-      this.response = responseData.data
+      this.$bvModal.show("my-modal")
 
-      console.log(this.response)
-      console.log(responseData)
+      await this.loadData()
 
       this.spinner = false
 
+    },
+    async searchByPhone() {
+      this.response = ''
+      this.spinner = true;
+
+      const url = 'https://msafr.we-work.pro/api/auth/admin/get-requests';
+
+      let myHeaders = new Headers();
+      const token = this.$store.getters.token;
+
+      myHeaders.append("authToken", token)
+      myHeaders.append("Content-Type", "application/json");
+
+      let raw = JSON.stringify({
+        "filter": 1,
+        "phone": this.phoneKey,
+        "paginateCount": 100
+      });
+
+      let requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      const response = await fetch(url, requestOptions);
+      const responseData = await response.json();
+
+      if (responseData.data.length > 0) {
+        this.response = responseData
+      } else {
+        this.msg = "لاتوجد بيانات"
+      }
+
+      this.spinner = false;
+
+    },
+    async searchByPlace() {
+      this.response = ''
+      this.spinner = true;
+
+      const url = 'https://msafr.we-work.pro/api/auth/admin/get-requests';
+
+      let myHeaders = new Headers();
+      const token = this.$store.getters.token;
+
+      myHeaders.append("authToken", token)
+      myHeaders.append("Content-Type", "application/json");
+
+      let raw = JSON.stringify({
+        "filter": 2,
+        "from_place": this.fromCityKey,
+        "to_place": this.toCityKey,
+        "paginateCount": 100
+      });
+
+      let requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      const response = await fetch(url, requestOptions);
+      const responseData = await response.json();
+
+      console.log(responseData)
+
+      if (responseData.data.data.length > 0) {
+        this.response = responseData.data
+      } else {
+        this.msg = "لاتوجد بيانات"
+      }
+
+      this.spinner = false;
+
+    },
+    async remove() {
+      this.spinner = true
+
+      this.phoneKey = ''
+      this.fromCityKey = ''
+      this.toCityKey = ''
+
+      await this.loadData();
+      this.spinner = false
     }
   }
 
@@ -276,5 +352,19 @@ h1, h2 {
 .search-form button {
   padding: 0 5px;
 }
+
+a, .a {
+  color: #111111;
+  text-decoration: none;
+  padding: 2px 5px;
+  cursor: pointer;
+}
+
+a:hover, .a:hover {
+  color: #198754 !important;
+  border-bottom: 1px solid #198754;
+  padding: 2px 5px;
+}
+
 
 </style>

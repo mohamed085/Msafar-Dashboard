@@ -3,7 +3,7 @@
     <div class="add-new-order-section">
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2 mb-4 border-bottom">
-        <h1>إرسال ايميل و اشعار ونوافذ و SMS</h1>
+        <h1>إرسال ايميل او اشعار للعملاء</h1>
       </div>
 
 
@@ -45,8 +45,8 @@
                       <b-form-group class="mt-auto mb-auto">
                         <b-form-radio-group class="mt-auto mb-auto">
                           <div class="d-flex">
-                            <b-form-radio class="mt-auto mb-auto" value="0"></b-form-radio><span class="mt-auto mb-auto me-1 ms-1">إرسال بريد</span>
-                            <b-form-radio class="mt-auto mb-auto" value="1"></b-form-radio><span class="mt-auto mb-auto me-1 ms-1">إرسال شعار</span>
+                            <b-form-radio v-model="send_by" class="mt-auto mb-auto" value="2"></b-form-radio><span class="mt-auto mb-auto me-1 ms-1">إرسال بريد</span>
+                            <b-form-radio v-model="send_by" class="mt-auto mb-auto" value="0"></b-form-radio><span class="mt-auto mb-auto me-1 ms-1">إرسال شعار</span>
                           </div>
                         </b-form-radio-group>
                       </b-form-group>
@@ -117,7 +117,7 @@ export default {
       selectedUser: [],
       userSpinner: false,
       subject: '',
-      send_by: '',
+      send_by: 2,
       type_of_template: 1,
       usersId: [],
       spinner: false,
@@ -142,7 +142,7 @@ export default {
       myHeaders.append("authToken", token)
 
       let requestOptions = {
-        method: 'POST',
+        method: 'GET',
         headers: myHeaders,
         redirect: 'follow'
       };
@@ -151,9 +151,7 @@ export default {
 
       const responseData = await response.json();
 
-      this.users = responseData.data;
-
-      console.log(this.users)
+      this.users = responseData;
 
       this.userSpinner = false
 
@@ -174,7 +172,6 @@ export default {
       let myHeaders = new Headers();
 
       const token = this.$store.getters.token;
-      const userId = localStorage.getItem("id")
 
       myHeaders.append("authToken", token)
       myHeaders.append("Content-Type", "application/json");
@@ -188,8 +185,8 @@ export default {
       let raw = JSON.stringify({
         "type": 0,
         "subject": this.subject,
-        "send_by": userId,
-        "type_of_template": this.type_of_template,
+        "send_by": this.send_by,
+        "type_of_template": 0,
         "users": users
       });
 

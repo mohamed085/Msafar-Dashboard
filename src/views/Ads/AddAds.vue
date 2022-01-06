@@ -25,31 +25,29 @@
         <b-badge>{{ this.msg }}</b-badge>
 
         <b-form-group label-cols="2" label="الموضوع">
-          <b-form-input v-model="subject" type="text"></b-form-input>
+          <b-form-input v-model="subject" type="text" required></b-form-input>
         </b-form-group>
 
         <b-form-group label-cols="2" label="رابط الموقع">
-          <b-form-input v-model="link" type="text"></b-form-input>
+          <b-form-input v-model="link" type="url" required></b-form-input>
         </b-form-group>
-
-        <b-form-group label-cols="2" label="اسم الرحلة">
-          <input type="file" @change="onFileChange($event)">
-        </b-form-group>
-
-        <div v-if="image" class="mb-2">
-          <b-img class="image" :src="image"></b-img>
-        </div>
 
         <b-form-group label-cols="2" label="عدد التكرار">
-          <b-form-input v-model="appear_time" type="number"></b-form-input>
+          <b-form-input v-model="daily_repeat" type="number" required></b-form-input>
         </b-form-group>
 
         <b-form-group label-cols="2" label="المدة">
-          <b-form-input v-model="daily_repeat" type="number"></b-form-input>
+          <div class="d-flex">
+            <span class="me-2 ms-2">تاريخ البداية</span>
+            <b-form-input type="date" v-model="start_date" required placeholder="بحث الجميع من تاريخ"></b-form-input>
+            <span class="me-2 ms-2">تاريخ النهاية</span>
+            <b-form-input type="date" v-model="end_date" required placeholder="إالي تاريخ"></b-form-input>
+          </div>
+
         </b-form-group>
 
 
-        <b-form-group label-cols="2"  label="موقع الاعلان">
+        <b-form-group label-cols="2"  label="حركة الاعلان">
           <b-form-group class="d-flex">
             <div class="d-flex">
               <b-form-radio class="me-2 ms-2" v-model="animation_type" name="شريط" value="0"></b-form-radio>
@@ -67,114 +65,74 @@
         </b-form-group>
 
         <b-form-group label-cols="2" label="صفحات المسافر">
-          <b-form-group>
-            <b-form-checkbox-group class="d-flex" id="checkbox-group-2" v-model="masafr_places">
-              <div class="d-flex">
-                <b-form-checkbox value="1"></b-form-checkbox>
-                <span class="me-2 ms-2">الرئيسية</span>
-              </div>
+          <b-form-checkbox v-model="masafr_appear" size="lg" switch></b-form-checkbox>
+<!--          <b-form-group>-->
+<!--            <b-form-checkbox-group class="d-flex" id="checkbox-group-2" v-model="masafr_places">-->
+<!--              <div class="d-flex">-->
+<!--                <b-form-checkbox value="1"></b-form-checkbox>-->
+<!--                <span class="me-2 ms-2">الرئيسية</span>-->
+<!--              </div>-->
 
-              <div class="d-flex">
-                <b-form-checkbox value="2"></b-form-checkbox>
-                <span class="me-2 ms-2">الشات</span>
-              </div>
+<!--              <div class="d-flex">-->
+<!--                <b-form-checkbox value="1"></b-form-checkbox>-->
+<!--                <span class="me-2 ms-2">الشات</span>-->
+<!--              </div>-->
 
-              <div class="d-flex">
-                <b-form-checkbox value="3"></b-form-checkbox>
-                <span class="me-2 ms-2">الفواتير</span>
-              </div>
+<!--              <div class="d-flex">-->
+<!--                <b-form-checkbox value="1"></b-form-checkbox>-->
+<!--                <span class="me-2 ms-2">الفواتير</span>-->
+<!--              </div>-->
 
-              <div class="d-flex">
-                <b-form-checkbox value="4"></b-form-checkbox>
-                <span class="me-2 ms-2">الطلب</span>
-              </div>
-            </b-form-checkbox-group>
-          </b-form-group>
+<!--              <div class="d-flex">-->
+<!--                <b-form-checkbox value="1"></b-form-checkbox>-->
+<!--                <span class="me-2 ms-2">الطلب</span>-->
+<!--              </div>-->
+<!--            </b-form-checkbox-group>-->
+<!--          </b-form-group>-->
         </b-form-group>
 
         <b-form-group label-cols="2" label="صفحات العميل">
-          <b-form-group>
-            <b-form-checkbox-group class="d-flex" id="checkbox-group-2" v-model="user_places">
-              <div class="d-flex">
-                <b-form-checkbox value="1"></b-form-checkbox>
-                <span class="me-2 ms-2">الرئيسية</span>
-              </div>
+          <b-form-checkbox v-model="user_appear" size="lg" switch></b-form-checkbox>
 
-              <div class="d-flex">
-                <b-form-checkbox value="2"></b-form-checkbox>
-                <span class="me-2 ms-2">الشات</span>
-              </div>
+          <!--          <b-form-group>-->
+<!--            <b-form-checkbox-group class="d-flex" id="checkbox-group-2" v-model="user_places">-->
+<!--              <div class="d-flex">-->
+<!--                <b-form-checkbox value="1"></b-form-checkbox>-->
+<!--                <span class="me-2 ms-2">الرئيسية</span>-->
+<!--              </div>-->
 
-              <div class="d-flex">
-                <b-form-checkbox value="3"></b-form-checkbox>
-                <span class="me-2 ms-2">الفواتير</span>
-              </div>
+<!--              <div class="d-flex">-->
+<!--                <b-form-checkbox value="1"></b-form-checkbox>-->
+<!--                <span class="me-2 ms-2">الشات</span>-->
+<!--              </div>-->
 
-              <div class="d-flex">
-                <b-form-checkbox value="4"></b-form-checkbox>
-                <span class="me-2 ms-2">الطلب</span>
-              </div>
-            </b-form-checkbox-group>
-          </b-form-group>
-        </b-form-group>
+<!--              <div class="d-flex">-->
+<!--                <b-form-checkbox value="1"></b-form-checkbox>-->
+<!--                <span class="me-2 ms-2">الفواتير</span>-->
+<!--              </div>-->
 
-        <b-form-group label-cols="2" label="الايام">
-          <b-form-group>
-            <b-form-checkbox-group class="d-flex" id="checkbox-group-2" v-model="days">
-              <div class="d-flex">
-                <b-form-checkbox value="1"></b-form-checkbox>
-                <span class="me-2 ms-2">السبت</span>
-              </div>
-
-              <div class="d-flex">
-                <b-form-checkbox value="2"></b-form-checkbox>
-                <span class="me-2 ms-2">الحد</span>
-              </div>
-
-              <div class="d-flex">
-                <b-form-checkbox value="3"></b-form-checkbox>
-                <span class="me-2 ms-2">الاثنين</span>
-              </div>
-
-              <div class="d-flex">
-                <b-form-checkbox value="4"></b-form-checkbox>
-                <span class="me-2 ms-2">الثلاثاء</span>
-              </div>
-
-
-              <div class="d-flex">
-                <b-form-checkbox value="5"></b-form-checkbox>
-                <span class="me-2 ms-2">الاربعاء</span>
-              </div>
-
-
-              <div class="d-flex">
-                <b-form-checkbox value="6"></b-form-checkbox>
-                <span class="me-2 ms-2">الخميس</span>
-              </div>
-
-              <div class="d-flex">
-                <b-form-checkbox value="7"></b-form-checkbox>
-                <span class="me-2 ms-2">الجمعة</span>
-              </div>
-            </b-form-checkbox-group>
-          </b-form-group>
+<!--              <div class="d-flex">-->
+<!--                <b-form-checkbox value="1"></b-form-checkbox>-->
+<!--                <span class="me-2 ms-2">الطلب</span>-->
+<!--              </div>-->
+<!--            </b-form-checkbox-group>-->
+<!--          </b-form-group>-->
         </b-form-group>
 
         <b-form-group label-cols="2" label="ارسال الي">
           <b-form-radio-group v-model="person_target">
             <div class="d-flex">
-              <b-form-radio value="1"></b-form-radio>
+              <b-form-radio value="1" required></b-form-radio>
               <span class="me-2 ms-2">كل العملاء</span>
             </div>
 
             <div class="d-flex">
-              <b-form-radio value="2"></b-form-radio>
+              <b-form-radio value="2" required></b-form-radio>
               <span class="me-2 ms-2">كل المسافرين</span>
             </div>
 
             <div class="d-flex">
-              <b-form-radio value="3"></b-form-radio>
+              <b-form-radio value="3" required></b-form-radio>
               <span class="me-2 ms-2">كل الزوار</span>
             </div>
           </b-form-radio-group>
@@ -185,7 +143,6 @@
 
       </b-form>
     </div>
-
   </div>
 </template>
 
@@ -204,6 +161,10 @@ export default {
       animation_type: '',
       all_days: '',
       in_chats: '',
+      masafr_appear: '',
+      user_appear: '',
+      start_date: '',
+      end_date: '',
       masafr_places: [],
       user_places: [],
       days: [],
@@ -245,7 +206,11 @@ export default {
         "all_days": this.days.length == 7 ? 1 : 0,
         "days": this.days,
         "user_places": this.user_places,
-        "masafr_places": this.masafr_places
+        "masafr_places": this.masafr_places,
+        "masafr_appear": this.masafr_appear,
+        "user_appear": this.user_appear,
+        "start_date": this.start_date,
+        "end_date": this.end_date,
       });
 
       let requestOptions = {
@@ -259,8 +224,6 @@ export default {
 
       const responseData = await response.json();
 
-      this.spinner = false;
-
       if (responseData.status) {
         this.status = true
         this.msg = 'تم إضافة الاعلان بنجاح'
@@ -269,7 +232,7 @@ export default {
         this.msg = 'لم يتم اضافة الاعلان'
       }
 
-      console.log(responseData)
+      this.spinner = false;
 
     },
     refreshLink() {
